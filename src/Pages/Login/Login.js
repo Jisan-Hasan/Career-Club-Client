@@ -1,10 +1,11 @@
 import { FaFacebook, FaGithub, FaGoogle } from "react-icons/fa";
 import { Button, Label, TextInput } from "flowbite-react";
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Login = () => {
     return (
-        <div className="max-w-lg mx-auto mt-10  md:mt-14 lg:mt-20 bg-gray-100 px-12 pt-14 pb-24 rounded-xl divide-y-2">
+        <div className="max-w-lg mx-auto mt-10  md:mt-14 lg:mt-20 bg-gray-100 px-12 py-14 rounded-xl divide-y-2">
             <h3 className="text-3xl font-bold mb-5 text-center">Login</h3>
             <form className="flex flex-col">
                 <div className="mt-4">
@@ -42,9 +43,9 @@ const Login = () => {
                 <div className="mt-2 mb-3">
                     <div className="mb-2 text-sm block">
                         Don't have any account?{" "}
-                        <button className="text-sm text-blue-500">
+                        <Link to='/signup' className="text-sm text-blue-500">
                             Sign Up
-                        </button>
+                        </Link>
                     </div>
                 </div>
             </form>
