@@ -1,13 +1,81 @@
 import { Button, FileInput, Label, Radio, TextInput } from "flowbite-react";
-import React from "react";
+import React, { useContext } from "react";
+import { toast } from "react-hot-toast";
 import { FaFacebook, FaGithub, FaGoogle } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { saveUser, setUserRole, setUserVerifyStatus } from "../../api/auth";
+import { AuthContext } from "../../contexts/AuthProvider";
 
 const Signup = () => {
+    const {
+        user,
+        loading,
+        setLoading,
+        createUser,
+        signInWithGoogle,
+        updateUserProfile,
+        signIn,
+        resetPassword,
+        logout,
+    } = useContext(AuthContext);
+
+    const navigate = useNavigate();
+    // handle signup
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const form = event.target;
+
+        // get form data
+        const name = form.name.value;
+        const email = form.email.value;
+        const password = form.password.value;
+        const role = form.role.value;
+        // console.log(name, email, password, role);
+
+        // get image & host on imgbb
+        const image = form.image.files[0];
+        const formData = new FormData();
+        formData.append("image", image);
+
+        const url = `${process.env.REACT_APP_imgbbURL}`;
+        fetch(url, {
+            method: "POST",
+            body: formData,
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                // console.log(data);
+                if (data.success) {
+                    const img_url = data.data.display_url;
+                    // create user with email & password
+                    createUser(email, password).then((result) => {
+                        const user = result.user;
+                        console.log(user);
+
+                        // save user in db
+                        saveUser(user?.email);
+                        // update user info
+                        updateUser(name, img_url, role);
+                        // setUserRole
+                        setUserRole(user?.email, role);
+                        // setUserVerifyStatus
+                        setUserVerifyStatus(user?.email, false);
+                    });
+                }
+            });
+    };
+
+    const updateUser = async (name, img, role) => {
+        updateUserProfile(name, img).then(() => {
+            toast.success("Account Registered Successfully.");
+            navigate("/");
+        });
+    };
+
     return (
         <div className="max-w-lg mx-auto mt-10  md:mt-14 lg:mt-20 bg-gray-100 px-12 py-14 rounded-xl divide-y-2">
             <h3 className="text-3xl font-bold mb-5 text-center">Sign Up</h3>
-            <form className="flex flex-col">
+            <form onSubmit={handleSubmit} className="flex flex-col">
                 {/* name */}
                 <div className="mt-3">
                     <div className="mb-2 block">
@@ -15,20 +83,9 @@ const Signup = () => {
                     </div>
                     <TextInput
                         id="name"
-                        type="email"
+                        type="name"
+                        name="name"
                         placeholder="Jisan Hasan"
-                        required={true}
-                    />
-                </div>
-                {/* email */}
-                <div className="mt-3">
-                    <div className="mb-2 block">
-                        <Label htmlFor="email" value="Your email" />
-                    </div>
-                    <TextInput
-                        id="email"
-                        type="email"
-                        placeholder="jisan@gmail.com"
                         required={true}
                     />
                 </div>
@@ -38,8 +95,23 @@ const Signup = () => {
                     <div className="mb-2 block">
                         <Label htmlFor="file" value="Profile Picture" />
                     </div>
-                    <FileInput id="file" required={true} />
+                    <FileInput name="image" id="file" required={true} />
                 </div>
+
+                {/* email */}
+                <div className="mt-3">
+                    <div className="mb-2 block">
+                        <Label htmlFor="email" value="Your email" />
+                    </div>
+                    <TextInput
+                        id="email"
+                        type="email"
+                        name="email"
+                        placeholder="jisan@gmail.com"
+                        required={true}
+                    />
+                </div>
+
                 {/* password */}
                 <div className="mt-3">
                     <div className="mb-2 block">
@@ -48,20 +120,16 @@ const Signup = () => {
                     <TextInput
                         id="password"
                         type="password"
+                        name="password"
                         placeholder="******"
                         required={true}
                     />
                 </div>
 
                 {/* role select */}
-                <fieldset
-                    className="mt-4 grid grid-cols-3"
-                    id="radio"
-                >
+                <fieldset className="mt-4 grid grid-cols-3" id="radio">
                     <div>
-                        <legend>
-                            Select Your Role:
-                        </legend>
+                        <legend>Select Your Role:</legend>
                     </div>
                     <div className="flex items-center gap-x-2">
                         <Radio

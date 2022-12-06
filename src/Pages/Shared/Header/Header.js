@@ -28,14 +28,14 @@ const Header = () => {
                 <Navbar.Toggle />
             </div>
             <Navbar.Collapse>
-                <Link className="hover:text-blue-600" to="/">
+                <Link to='/' className="hover:text-blue-600">
                     Home
                 </Link>
                 <Link className="hover:text-blue-600" to="/services">
                     Services
                 </Link>
-                <Link className="hover:text-blue-600" to="/blog">
-                    Blog
+                <Link to='/blogs' className="hover:text-blue-600">
+                    Blogs
                 </Link>
             </Navbar.Collapse>
         </Navbar>
