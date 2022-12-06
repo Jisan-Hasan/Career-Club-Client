@@ -1,4 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
+import AdminLayout from "../layout/AdminLayout";
 import Main from "../layout/Main";
 import Blogs from "../Pages/Blogs/Blogs";
 import Login from "../Pages/Login/Login";
@@ -30,6 +31,20 @@ const router = createBrowserRouter([
                         <Blogs />
                     </PrivateRoute>
                 ),
+            },
+        ],
+    },
+    {
+        path: "/dashboard",
+        element: (
+            <PrivateRoute>
+                <AdminLayout />
+            </PrivateRoute>
+        ),
+        children: [
+            {
+                index: true,
+                element: <p>Admin Dashboard</p>,
             },
         ],
     },

@@ -1,6 +1,7 @@
 import { Button, Navbar } from "flowbite-react";
 import React, { useContext } from "react";
 import { toast } from "react-hot-toast";
+import { FaHamburger } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../contexts/AuthProvider";
 
@@ -16,6 +17,12 @@ const Header = () => {
     return (
         <>
             <Navbar className="my-4 shadow-sm" fluid={true} rounded={true}>
+                <label
+                    htmlFor="my-drawer-2"
+                    className="drawer-button lg:hidden"
+                >
+                    <FaHamburger />
+                </label>
                 <Link to="/">
                     <span className="self-center text-emerald-600 whitespace-nowrap text-4xl font-bold dark:text-white">
                         CareerClub
@@ -48,6 +55,9 @@ const Header = () => {
                     </Link>
                     <Link to="/blogs" className="hover:text-blue-600">
                         Blogs
+                    </Link>
+                    <Link to="/dashboard" className="hover:text-blue-600">
+                        Dashboard
                     </Link>
                 </Navbar.Collapse>
             </Navbar>
