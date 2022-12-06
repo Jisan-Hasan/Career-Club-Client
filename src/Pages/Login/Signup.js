@@ -55,7 +55,7 @@ const Signup = () => {
                         // save user in db
                         saveUser(user?.email);
                         // update user info
-                        updateUser(name, img_url, role);
+                        updateUser(name, img_url);
                         // setUserRole
                         setUserRole(user?.email, role);
                         // setUserVerifyStatus
@@ -65,11 +65,31 @@ const Signup = () => {
             });
     };
 
-    const updateUser = async (name, img, role) => {
+    const updateUser = async (name, img) => {
         updateUserProfile(name, img).then(() => {
             toast.success("Account Registered Successfully.");
             navigate("/");
         });
+    };
+
+    const handleGoogleSignIn = () => {
+        signInWithGoogle()
+            .then((result) => {
+                const user = result.user;
+
+                // save user in db
+                saveUser(user?.email);
+                // setUserRole
+                setUserRole(user?.email, "job-seeker");
+                // setUserVerifyStatus
+                setUserVerifyStatus(user?.email, false);
+                // show success
+                toast.success("Signin Successfully.");
+                navigate("/");
+            })
+            .catch((err) => {
+                toast.error(`err.message`);
+            });
     };
 
     return (
@@ -165,7 +185,7 @@ const Signup = () => {
                     Sign In With Social Account
                 </h4>
                 <div className="flex justify-center gap-12 mt-4">
-                    <FaGoogle size={25} />
+                    <FaGoogle onClick={handleGoogleSignIn} size={25} />
                     <FaFacebook size={25} />
                     <FaGithub size={25} />
                 </div>

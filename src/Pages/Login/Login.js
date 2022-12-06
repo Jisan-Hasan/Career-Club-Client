@@ -1,9 +1,45 @@
-import { FaFacebook, FaGithub, FaGoogle } from "react-icons/fa";
 import { Button, Label, TextInput } from "flowbite-react";
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useContext } from "react";
+import { toast } from "react-hot-toast";
+import { FaFacebook, FaGithub, FaGoogle } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import { saveUser, setUserRole, setUserVerifyStatus } from "../../api/auth";
+import { AuthContext } from "../../contexts/AuthProvider";
 
 const Login = () => {
+    const {
+        user,
+        loading,
+        setLoading,
+        createUser,
+        signInWithGoogle,
+        updateUserProfile,
+        signIn,
+        resetPassword,
+        logout,
+    } = useContext(AuthContext);
+
+    const navigate = useNavigate();
+
+    const handleGoogleSignIn = () => {
+        signInWithGoogle()
+            .then((result) => {
+                const user = result.user;
+
+                // save user in db
+                saveUser(user?.email);
+                // setUserRole
+                setUserRole(user?.email, "job-seeker");
+                // setUserVerifyStatus
+                setUserVerifyStatus(user?.email, false);
+                // show success
+                toast.success("Signin Successfully.");
+                navigate("/");
+            })
+            .catch((err) => {
+                toast.error(`err.message`);
+            });
+    };
     return (
         <div className="max-w-lg mx-auto mt-10  md:mt-14 lg:mt-20 bg-gray-100 px-12 py-14 rounded-xl divide-y-2">
             <h3 className="text-3xl font-bold mb-5 text-center">Login</h3>
@@ -54,7 +90,7 @@ const Login = () => {
                     Sign In With Social Account
                 </h4>
                 <div className="flex justify-center gap-12 mt-4">
-                    <FaGoogle  size={25} />
+                    <FaGoogle onClick={handleGoogleSignIn} size={25} />
                     <FaFacebook size={25} />
                     <FaGithub size={25} />
                 </div>
