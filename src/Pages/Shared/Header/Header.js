@@ -1,5 +1,5 @@
 import { Button, Navbar } from "flowbite-react";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { FaHamburger } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -14,6 +14,26 @@ const Header = () => {
                 toast.error(`err.message`);
             });
     };
+
+    const [path, setPath] = useState("/userDashboard");
+
+    useEffect(() => {
+        fetch(`${process.env.REACT_APP_API_URL}/userRole/${user?.email}`)
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.status) {
+                    if (data.data === "admin") {
+                        setPath("/adminDashboard");
+                    } else if (data.data === "employer") {
+                        setPath("/employerDashboard");
+                    } else if (data.data === "job-seeker") {
+                        setPath("/userDashboard");
+                    }
+                }
+            });
+        // if(user?.)
+    }, [user]);
+
     return (
         <>
             <Navbar className="my-4 shadow-sm" fluid={true} rounded={true}>
@@ -56,7 +76,10 @@ const Header = () => {
                     <Link to="/blogs" className="hover:text-blue-600">
                         Blogs
                     </Link>
-                    <Link to="/dashboard" className="hover:text-blue-600">
+                    <Link
+                        to={`${path}`}
+                        className="hover:text-blue-600"
+                    >
                         Dashboard
                     </Link>
                 </Navbar.Collapse>

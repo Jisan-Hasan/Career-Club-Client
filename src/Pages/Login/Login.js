@@ -8,17 +8,7 @@ import { AuthContext } from "../../contexts/AuthProvider";
 
 const Login = () => {
     const [email, setEmail] = useState("");
-    const {
-        user,
-        loading,
-        setLoading,
-        createUser,
-        signInWithGoogle,
-        updateUserProfile,
-        signIn,
-        resetPassword,
-        logout,
-    } = useContext(AuthContext);
+    const { signInWithGoogle, signIn } = useContext(AuthContext);
 
     const navigate = useNavigate();
     const location = useLocation();

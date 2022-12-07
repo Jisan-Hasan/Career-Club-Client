@@ -35,7 +35,7 @@ const router = createBrowserRouter([
         ],
     },
     {
-        path: "/dashboard",
+        path: "/adminDashboard",
         element: (
             <PrivateRoute>
                 <AdminLayout />

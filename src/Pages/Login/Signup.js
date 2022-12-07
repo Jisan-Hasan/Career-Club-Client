@@ -7,17 +7,8 @@ import { saveUser, setUserRole, setUserVerifyStatus } from "../../api/auth";
 import { AuthContext } from "../../contexts/AuthProvider";
 
 const Signup = () => {
-    const {
-        user,
-        loading,
-        setLoading,
-        createUser,
-        signInWithGoogle,
-        updateUserProfile,
-        signIn,
-        resetPassword,
-        logout,
-    } = useContext(AuthContext);
+    const { createUser, signInWithGoogle, updateUserProfile } =
+        useContext(AuthContext);
 
     const navigate = useNavigate();
     // handle signup
