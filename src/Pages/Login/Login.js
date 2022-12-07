@@ -40,17 +40,15 @@ const Login = () => {
                 const user = result.user;
 
                 // save user in db
-                saveUser(user?.email);
+                saveUser(user);
                 // setUserRole
                 setUserRole(user?.email, "job-seeker");
-                // setUserVerifyStatus
-                setUserVerifyStatus(user?.email, false);
                 // show success
                 toast.success("Signin Successfully.");
                 navigate(from);
             })
             .catch((err) => {
-                toast.error(`err.message`);
+                toast.error(`${err.message}`);
             });
     };
     return (

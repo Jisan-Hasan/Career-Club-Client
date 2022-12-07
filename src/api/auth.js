@@ -1,24 +1,23 @@
 // save user in the db
-export const saveUser = async(email) => {
-    const userObj = {
-        email,
+export const saveUser = (user) => {
+    const currentUser = {
+        name: user.displayName,
+        email: user.email,
     };
-    fetch(`${process.env.REACT_APP_API_URL}/user`, {
-        method: "POST",
+    fetch(`${process.env.REACT_APP_API_URL}/user/${user?.email}`, {
+        method: "PUT",
         headers: {
             "content-type": "application/json",
         },
-        body: JSON.stringify(userObj),
+        body: JSON.stringify(currentUser),
+    }).then(res => res.json())
+    .then(data => {
+        return data.status;
     })
-        .then((res) => res.json())
-        .then((data) => {
-            return data.status;
-            // console.log(data);
-        });
 };
 
 // set user role
-export const setUserRole = async(email, role) => {
+export const setUserRole = async (email, role) => {
     const roleObj = {
         role: role,
     };
@@ -38,7 +37,7 @@ export const setUserRole = async(email, role) => {
 };
 
 // set user verify status
-export const setUserVerifyStatus = async(email, isVerified) => {
+export const setUserVerifyStatus = async (email, isVerified) => {
     const verifyObj = {
         isVerified: isVerified,
     };

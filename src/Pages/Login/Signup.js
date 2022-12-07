@@ -43,23 +43,24 @@ const Signup = () => {
                         const user = result.user;
                         console.log(user);
 
-                        // save user in db
-                        saveUser(user?.email);
+                        
                         // update user info
-                        updateUser(name, img_url);
-                        // setUserRole
-                        setUserRole(user?.email, role);
-                        // setUserVerifyStatus
-                        setUserVerifyStatus(user?.email, false);
+                        updateUser(user,name, img_url, role);
+                        
                     });
                 }
             });
     };
 
-    const updateUser = async (name, img) => {
+    const updateUser = async (user,name, img, role) => {
         updateUserProfile(name, img).then(() => {
+            // save user in db
+            saveUser(user);
+            // show success toast
             toast.success("Account Registered Successfully.");
             navigate("/");
+            // setUserRole
+            setUserRole(user?.email, role);
         });
     };
 
@@ -69,17 +70,15 @@ const Signup = () => {
                 const user = result.user;
 
                 // save user in db
-                saveUser(user?.email);
+                saveUser(user);
                 // setUserRole
                 setUserRole(user?.email, "job-seeker");
-                // setUserVerifyStatus
-                setUserVerifyStatus(user?.email, false);
                 // show success
                 toast.success("Signin Successfully.");
                 navigate("/");
             })
             .catch((err) => {
-                toast.error(`err.message`);
+                toast.error(`${err.message}`);
             });
     };
 
