@@ -1,8 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
 import AdminLayout from "../layout/AdminLayout";
 import Main from "../layout/Main";
+import AddCategories from "../Pages/AdminDashboard/AddCategories";
 import AddPackage from "../Pages/AdminDashboard/AddPackage";
 import AdminDashboard from "../Pages/AdminDashboard/AdminDashboard";
+import ViewCategories from "../Pages/AdminDashboard/ViewCategories";
 import ViewPackage from "../Pages/AdminDashboard/ViewPackage";
 import Blogs from "../Pages/Blogs/Blogs";
 import Login from "../Pages/Login/Login";
@@ -56,6 +58,14 @@ const router = createBrowserRouter([
             {
                 path: "/adminDashboard/viewPackage",
                 element: <ViewPackage />,
+            },
+            {
+                path: "/adminDashboard/addCategory",
+                element: <AddCategories />,
+            },
+            {
+                path: "/adminDashboard/viewCategory",
+                element: <ViewCategories />,
             },
         ],
     },

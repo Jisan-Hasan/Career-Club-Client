@@ -35,10 +35,10 @@ const AdminLayout = () => {
                         </li>
                         <li></li>
                         <li>
-                            <Link>Add Categories</Link>
+                            <Link to='/adminDashboard/addCategory'>Add Categories</Link>
                         </li>
                         <li>
-                            <Link>View Categories</Link>
+                            <Link to='/adminDashboard/viewCategory'>View Categories</Link>
                         </li>
                         <li></li>
                     </ul>
