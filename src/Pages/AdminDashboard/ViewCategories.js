@@ -1,6 +1,7 @@
 import { Button, Label, Modal, Table, TextInput } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
+import { FaExclamationTriangle } from "react-icons/fa";
 
 const ViewCategories = () => {
     const [categories, setCategories] = useState([]);
@@ -36,25 +37,63 @@ const ViewCategories = () => {
     const handleUpdate = (e) => {
         e.preventDefault();
         setUpdateModal(false);
-        const updatedCategory = {title: e.target.title.value};
-        
-        fetch(`${process.env.REACT_APP_API_URL}/category/${selectedCategory._id}`, {
-            method: 'PATCH',
-            headers: {
-                'content-type': 'application/json',
-            },
-            body: JSON.stringify(updatedCategory)
-        }).then(res => res.json()).then(data => {
-            if(data.status){
-                setRefresh(!refresh);
-                toast.success('Category Updated Successfully!');
+        const updatedCategory = { title: e.target.title.value };
+
+        fetch(
+            `${process.env.REACT_APP_API_URL}/category/${selectedCategory._id}`,
+            {
+                method: "PATCH",
+                headers: {
+                    "content-type": "application/json",
+                },
+                body: JSON.stringify(updatedCategory),
             }
-        }).catch(err => {
-            toast.error("Can't Update! Try Again.");
-        })
+        )
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.status) {
+                    setRefresh(!refresh);
+                    toast.success("Category Updated Successfully!");
+                }
+            })
+            .catch((err) => {
+                toast.error("Can't Update! Try Again.");
+            });
     };
 
     // handle delete category
+    // handle delete button click
+    const handleDelete = (id) => {
+        // get particular package data
+        fetch(`${process.env.REACT_APP_API_URL}/category/${id}`)
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.status) {
+                    setSelectedCategory(data.data);
+                    setDeleteModal(true);
+                }
+            });
+    };
+
+    // handle confirm delete
+    const handleConfirmDelete = (isConfirm) => {
+        setDeleteModal(false);
+        if (isConfirm) {
+            fetch(
+                `${process.env.REACT_APP_API_URL}/category/${selectedCategory._id}`,
+                {
+                    method: "DELETE",
+                }
+            )
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.status) {
+                        toast.success("Package Deleted Successfully!");
+                        setRefresh(!refresh);
+                    }
+                });
+        }
+    };
 
     return (
         <div>
@@ -86,7 +125,12 @@ const ViewCategories = () => {
                                     >
                                         Edit
                                     </button>
-                                    <button className="font-medium text-blue-600 hover:underline dark:text-blue-500">
+                                    <button
+                                        onClick={() =>
+                                            handleDelete(category._id)
+                                        }
+                                        className="font-medium text-blue-600 hover:underline dark:text-blue-500"
+                                    >
                                         Delete
                                     </button>
                                 </Table.Cell>
@@ -143,6 +187,47 @@ const ViewCategories = () => {
                                         </Button>
                                     </div>
                                 </form>
+                            </div>
+                        </Modal.Body>
+                    </Modal>
+                </React.Fragment>
+            )}
+
+            {/* delete modal */}
+            {deleteModal && (
+                <React.Fragment>
+                    <Modal
+                        show={true}
+                        size="md"
+                        popup={true}
+                        onClose={() => setDeleteModal(false)}
+                    >
+                        <Modal.Header />
+                        <Modal.Body>
+                            <div className="text-center">
+                                <FaExclamationTriangle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
+                                <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                                    Are you sure you want to delete this
+                                    Category?
+                                </h3>
+                                <div className="flex justify-center gap-4">
+                                    <Button
+                                        color="failure"
+                                        onClick={() =>
+                                            handleConfirmDelete(true)
+                                        }
+                                    >
+                                        Yes, I'm sure
+                                    </Button>
+                                    <Button
+                                        color="gray"
+                                        onClick={() =>
+                                            handleConfirmDelete(false)
+                                        }
+                                    >
+                                        No, cancel
+                                    </Button>
+                                </div>
                             </div>
                         </Modal.Body>
                     </Modal>
