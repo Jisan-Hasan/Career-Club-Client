@@ -1,10 +1,13 @@
-import { Table } from "flowbite-react";
+import { Button, Modal, Table } from "flowbite-react";
 import React, { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
+import { FaExclamation, FaExclamationTriangle } from "react-icons/fa";
 import PackageUpdateModal from "./PackageUpdateModal";
 
 const ViewPackage = () => {
     const [packages, setPackages] = useState([]);
     const [updateModal, setUpdateModal] = useState(false);
+    const [deleteModal, setDeleteModal] = useState(false);
     const [selectedPack, setSelectedPack] = useState({});
     const [refresh, setRefresh] = useState(false);
 
@@ -17,7 +20,6 @@ const ViewPackage = () => {
                 }
             });
     }, [refresh]);
-    // console.log(packages);
 
     // handle edit button click
     const handleEdit = (id) => {
@@ -30,6 +32,39 @@ const ViewPackage = () => {
                     setUpdateModal(true);
                 }
             });
+    };
+
+    // handle delete button click
+    const handleDelete = (id) => {
+        // get particular package data
+        fetch(`${process.env.REACT_APP_API_URL}/package/${id}`)
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.status) {
+                    setSelectedPack(data.data);
+                    setDeleteModal(true);
+                }
+            });
+    };
+
+    // handle confirm delete
+    const handleConfirmDelete = (isConfirm) => {
+        setDeleteModal(false);
+        if (isConfirm) {
+            fetch(
+                `${process.env.REACT_APP_API_URL}/package/${selectedPack._id}`,
+                {
+                    method: "DELETE",
+                }
+            )
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.status) {
+                        toast.success("Package Deleted Successfully!");
+                        setRefresh(!refresh);
+                    }
+                });
+        }
     };
 
     return (
@@ -69,7 +104,10 @@ const ViewPackage = () => {
                                     >
                                         Edit
                                     </button>
-                                    <button className="font-medium text-blue-600 hover:underline dark:text-blue-500">
+                                    <button
+                                        onClick={() => handleDelete(pack._id)}
+                                        className="font-medium text-blue-600 hover:underline dark:text-blue-500"
+                                    >
                                         Delete
                                     </button>
                                 </Table.Cell>
@@ -86,6 +124,47 @@ const ViewPackage = () => {
                     refresh={refresh}
                     setRefresh={setRefresh}
                 />
+            )}
+
+            {/* delete modal */}
+            {deleteModal && (
+                <React.Fragment>
+                    <Modal
+                        show={true}
+                        size="md"
+                        popup={true}
+                        onClose={() => setDeleteModal(false)}
+                    >
+                        <Modal.Header />
+                        <Modal.Body>
+                            <div className="text-center">
+                                <FaExclamationTriangle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
+                                <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                                    Are you sure you want to delete this
+                                    Package?
+                                </h3>
+                                <div className="flex justify-center gap-4">
+                                    <Button
+                                        color="failure"
+                                        onClick={() =>
+                                            handleConfirmDelete(true)
+                                        }
+                                    >
+                                        Yes, I'm sure
+                                    </Button>
+                                    <Button
+                                        color="gray"
+                                        onClick={() =>
+                                            handleConfirmDelete(false)
+                                        }
+                                    >
+                                        No, cancel
+                                    </Button>
+                                </div>
+                            </div>
+                        </Modal.Body>
+                    </Modal>
+                </React.Fragment>
             )}
         </div>
     );
