@@ -2,6 +2,7 @@ import { Button, Modal, Table } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { FaExclamation, FaExclamationTriangle } from "react-icons/fa";
+import { setTitle } from "../../api/title";
 import PackageUpdateModal from "./PackageUpdateModal";
 
 const ViewPackage = () => {
@@ -10,6 +11,9 @@ const ViewPackage = () => {
     const [deleteModal, setDeleteModal] = useState(false);
     const [selectedPack, setSelectedPack] = useState({});
     const [refresh, setRefresh] = useState(false);
+
+    // set Title
+    setTitle('Packages')
 
     useEffect(() => {
         fetch(`${process.env.REACT_APP_API_URL}/package`)

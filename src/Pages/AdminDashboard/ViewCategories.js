@@ -2,6 +2,7 @@ import { Button, Label, Modal, Table, TextInput } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { FaExclamationTriangle } from "react-icons/fa";
+import { setTitle } from "../../api/title";
 
 const ViewCategories = () => {
     const [categories, setCategories] = useState([]);
@@ -9,6 +10,9 @@ const ViewCategories = () => {
     const [deleteModal, setDeleteModal] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState({});
     const [refresh, setRefresh] = useState(false);
+
+    // set Title
+    setTitle("Categories");
 
     useEffect(() => {
         fetch(`${process.env.REACT_APP_API_URL}/category`)
