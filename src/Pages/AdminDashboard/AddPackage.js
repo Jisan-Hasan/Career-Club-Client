@@ -2,8 +2,11 @@ import { Button, Label, TextInput } from "flowbite-react";
 import React from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { setTitle } from "../../api/title";
 
 const AddPackage = () => {
+    // set title
+    setTitle("Add Package");
     const navigate = useNavigate();
     const handleSubmit = (e) => {
         e.preventDefault();

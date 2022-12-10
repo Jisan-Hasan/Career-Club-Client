@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import AdminLayout from "../layout/AdminLayout";
+import EmployerLayout from "../layout/EmployerLayout";
 import Main from "../layout/Main";
 import AddCategories from "../Pages/AdminDashboard/AddCategories";
 import AddPackage from "../Pages/AdminDashboard/AddPackage";
@@ -7,6 +8,9 @@ import AdminDashboard from "../Pages/AdminDashboard/AdminDashboard";
 import ViewCategories from "../Pages/AdminDashboard/ViewCategories";
 import ViewPackage from "../Pages/AdminDashboard/ViewPackage";
 import Blogs from "../Pages/Blogs/Blogs";
+import BuyPackage from "../Pages/EmployerDashboard/BuyPackage";
+import EmployerDashboard from "../Pages/EmployerDashboard/EmployerDashboard";
+import MyPackage from "../Pages/EmployerDashboard/MyPackage";
 import Login from "../Pages/Login/Login";
 import Signup from "../Pages/Login/Signup";
 import PrivateRoute from "./PrivateRoute";
@@ -66,6 +70,28 @@ const router = createBrowserRouter([
             {
                 path: "/adminDashboard/viewCategory",
                 element: <ViewCategories />,
+            },
+        ],
+    },
+    {
+        path: "/employerDashboard",
+        element: (
+            <PrivateRoute>
+                <EmployerLayout />
+            </PrivateRoute>
+        ),
+        children: [
+            {
+                index: true,
+                element: <EmployerDashboard />,
+            },
+            {
+                path: "/employerDashboard/buyPackage",
+                element: <BuyPackage />,
+            },
+            {
+                path: "/employerDashboard/myPackage",
+                element: <MyPackage />,
             },
         ],
     },
