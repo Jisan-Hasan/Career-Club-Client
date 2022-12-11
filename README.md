@@ -1,3 +1,15 @@
+# Career Club
+
+##### Developer: Jisan Hasan
+
+###### Server: https://career-club-server.vercel.app/
+
+###### Client: https://career-club-dfff6.web.app/
+
+### Duration: Dec 4, 2022 - Present
+
+---
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

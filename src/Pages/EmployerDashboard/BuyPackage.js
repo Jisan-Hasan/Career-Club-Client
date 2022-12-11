@@ -36,7 +36,7 @@ const BuyPackage = () => {
                                 </span>
                             </div>
                             <ul
-                                role="list"
+                                
                                 className="my-7 space-y-5 flex flex-col items-center"
                             >
                                 <li className="flex space-x-3">
