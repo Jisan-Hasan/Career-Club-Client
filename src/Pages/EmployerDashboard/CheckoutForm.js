@@ -1,6 +1,6 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import React, { useContext, useEffect, useState } from "react";
-import { getPostNumber, setPostNumber } from "../../api/pack";
+import { setPostNumber } from "../../api/pack";
 import { AuthContext } from "../../contexts/AuthProvider";
 
 const CheckoutForm = ({ pack }) => {
