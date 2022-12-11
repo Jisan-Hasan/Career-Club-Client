@@ -1,9 +1,9 @@
-import { Card } from "flowbite-react";
+import { Card, Table } from "flowbite-react";
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthProvider";
 
-const MyPackage = () => {
+const Mypaymentage = () => {
     const { user } = useContext(AuthContext);
     const [payments, setPayments] = useState([]);
     const [availablePost, setAvailablePost] = useState(0);
@@ -19,10 +19,10 @@ const MyPackage = () => {
             });
     }, [user]);
     
+    // calculate total costs
     const totalCost = payments.reduce((accumulator, object) => {
         return accumulator + Number(object.price);
     }, 0);
-    console.log(totalCost);
 
     // get available post number
     useEffect(() => {
@@ -34,7 +34,7 @@ const MyPackage = () => {
     }, [user]);
     return (
         <div>
-            <h2 className="text-3xl font-bold text-center">My Package</h2>
+            <h2 className="text-3xl font-bold text-center">Package Summary</h2>
 
             <div className="max-w-sm mx-auto mt-8">
                 <Card>
@@ -56,17 +56,52 @@ const MyPackage = () => {
                         </span>
                         <div className="mt-4 flex space-x-3 lg:mt-6">
                             <Link
-                                to="/employerDashboard/buyPackage"
+                                to="/employerDashboard/buypaymentage"
                                 className="inline-flex items-center rounded-lg bg-blue-700 py-2 px-4 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                             >
-                                Buy More Package
+                                Buy More paymentage
                             </Link>
                         </div>
                     </div>
                 </Card>
             </div>
+
+            {/* show all transaction history */}
+            <h2 className="mt-10 text-2xl font-bold text-center">Payment History</h2>
+            <div className="mt-4">
+                <Table hoverable={true}>
+                    <Table.Head className="text-base text-[#05A3B7]">
+                        <Table.HeadCell>Serial</Table.HeadCell>
+                        <Table.HeadCell>Transaction Id</Table.HeadCell>
+                        <Table.HeadCell>Price</Table.HeadCell>
+                        <Table.HeadCell>Email</Table.HeadCell>
+                    </Table.Head>
+                    <Table.Body className="divide-y">
+                        {payments.map((payment, i) => (
+                            <Table.Row
+                                key={payment._id}
+                                className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                            >
+                                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                    {i + 1}
+                                </Table.Cell>
+                                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                    {payment.transactionId}
+                                </Table.Cell>
+                                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                    {payment.price}
+                                </Table.Cell>
+                                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                    {payment.email}
+                                </Table.Cell>
+                                
+                            </Table.Row>
+                        ))}
+                    </Table.Body>
+                </Table>
+            </div>
         </div>
     );
 };
 
-export default MyPackage;
+export default Mypaymentage;
