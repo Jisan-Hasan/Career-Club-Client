@@ -1,5 +1,6 @@
 import { Card } from "flowbite-react";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { setTitle } from "../../api/title";
 
 const BuyPackage = () => {
@@ -57,12 +58,13 @@ const BuyPackage = () => {
                                     </span>
                                 </li>
                             </ul>
+                            <Link className="inline-flex w-2/3 mx-auto justify-center" to={`/employerDashboard/payment/${pack._id}`}>
                             <button
                                 type="button"
-                                className="inline-flex w-2/3 mx-auto justify-center rounded-lg bg-blue-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900"
+                                className="rounded-lg bg-blue-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900"
                             >
                                 Buy Package
-                            </button>
+                            </button></Link>
                         </Card>
                     </div>
                 ))}

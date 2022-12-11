@@ -11,6 +11,7 @@ import Blogs from "../Pages/Blogs/Blogs";
 import BuyPackage from "../Pages/EmployerDashboard/BuyPackage";
 import EmployerDashboard from "../Pages/EmployerDashboard/EmployerDashboard";
 import MyPackage from "../Pages/EmployerDashboard/MyPackage";
+import Payment from "../Pages/EmployerDashboard/Payment";
 import Login from "../Pages/Login/Login";
 import Signup from "../Pages/Login/Signup";
 import PrivateRoute from "./PrivateRoute";
@@ -92,6 +93,14 @@ const router = createBrowserRouter([
             {
                 path: "/employerDashboard/myPackage",
                 element: <MyPackage />,
+            },
+            {
+                path: "/employerDashboard/payment/:id",
+                element: <Payment />,
+                loader: ({ params }) =>
+                    fetch(
+                        `${process.env.REACT_APP_API_URL}/package/${params.id}`
+                    ),
             },
         ],
     },
