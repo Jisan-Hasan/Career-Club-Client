@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import { toast } from "react-hot-toast";
 import { FaFacebook, FaGithub, FaGoogle } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import { saveUser, setUserRole, setUserVerifyStatus } from "../../api/auth";
+import { saveUser, setUserRole } from "../../api/auth";
 import { AuthContext } from "../../contexts/AuthProvider";
 
 const Signup = () => {
@@ -43,16 +43,14 @@ const Signup = () => {
                         const user = result.user;
                         // console.log(user);
 
-                        
                         // update user info
-                        updateUser(user,name, img_url, role);
-                        
+                        updateUser(user, name, img_url, role);
                     });
                 }
             });
     };
 
-    const updateUser = async (user,name, img, role) => {
+    const updateUser = async (user, name, img, role) => {
         updateUserProfile(name, img).then(() => {
             // save user in db
             saveUser(user);

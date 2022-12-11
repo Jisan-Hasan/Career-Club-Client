@@ -1,3 +1,5 @@
+import { setPostNumber } from "./pack";
+
 // save user in the db
 export const saveUser = (user) => {
     const currentUser = {
@@ -16,6 +18,8 @@ export const saveUser = (user) => {
     })
 };
 
+// set employer package
+
 // set user role
 export const setUserRole = async (email, role) => {
     const roleObj = {
@@ -31,6 +35,11 @@ export const setUserRole = async (email, role) => {
     })
         .then((res) => res.json())
         .then((data) => {
+            // set initial package number 0
+            if(role === 'employer'){
+                console.log("called");
+                setPostNumber(email, 0);
+            }
             return data.status;
             // console.log(data);
         });

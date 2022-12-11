@@ -1,15 +1,17 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import React, { useContext, useEffect, useState } from "react";
+import { getPostNumber, setPostNumber } from "../../api/pack";
 import { AuthContext } from "../../contexts/AuthProvider";
 
 const CheckoutForm = ({ pack }) => {
     const { user } = useContext(AuthContext);
-    const { price } = pack;
+    const { price, postNumber } = pack;
     const [cardError, setCardError] = useState("");
     const [clientSecret, setClientSecret] = useState("");
     const [success, setSuccess] = useState("");
     const [transactionId, setTransactionId] = useState("");
     const [processing, setProcessing] = useState(false);
+    const [post, setPost] = useState(0);
 
     useEffect(() => {
         // Create PaymentIntent as soon as the page loads
@@ -21,6 +23,15 @@ const CheckoutForm = ({ pack }) => {
             .then((res) => res.json())
             .then((data) => setClientSecret(data.clientSecret));
     }, [price]);
+
+    useEffect(() => {
+        fetch(`${process.env.REACT_APP_API_URL}/postNumber/${user?.email}`)
+        .then((res) => res.json())
+        .then((data) => {
+            setPost(Number(data.postNumber));
+        });
+    }, [user, pack, price]);
+    console.log(post);
 
     const stripe = useStripe();
     const elements = useElements();
@@ -72,7 +83,7 @@ const CheckoutForm = ({ pack }) => {
                 price,
                 transactionId: paymentIntent.id,
                 email: user?.email,
-                packageId: pack._id
+                packageId: pack._id,
             };
             console.log(payment);
             fetch(`${process.env.REACT_APP_API_URL}/payment`, {
@@ -87,6 +98,8 @@ const CheckoutForm = ({ pack }) => {
                     if (data.data.insertedId) {
                         setSuccess("Congrats! Your Payment Completed.");
                         setTransactionId(paymentIntent?.id);
+                        // console.log(Number(post)+Number(postNumber));
+                        setPostNumber(user?.email,Number(post)+Number(postNumber));
                         setProcessing(false);
                     }
                 });
