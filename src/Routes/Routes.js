@@ -11,7 +11,9 @@ import Blogs from "../Pages/Blogs/Blogs";
 import BuyPackage from "../Pages/EmployerDashboard/BuyPackage";
 import EmployerDashboard from "../Pages/EmployerDashboard/EmployerDashboard";
 import MyPackage from "../Pages/EmployerDashboard/MyPackage";
+import MyPosts from "../Pages/EmployerDashboard/MyPosts";
 import Payment from "../Pages/EmployerDashboard/Payment";
+import PostJob from "../Pages/EmployerDashboard/PostJob";
 import Login from "../Pages/Login/Login";
 import Signup from "../Pages/Login/Signup";
 import PrivateRoute from "./PrivateRoute";
@@ -101,6 +103,14 @@ const router = createBrowserRouter([
                     fetch(
                         `${process.env.REACT_APP_API_URL}/package/${params.id}`
                     ),
+            },
+            {
+                path: "/employerDashboard/postJob",
+                element: <PostJob />,
+            },
+            {
+                path: "/employerDashboard/myPost",
+                element: <MyPosts />,
             },
         ],
     },

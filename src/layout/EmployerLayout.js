@@ -35,10 +35,10 @@ const EmployerLayout = () => {
                         </li>
                         <li></li>
                         <li>
-                            <Link to='/employerDashboard/addCategory'>Add Categories</Link>
+                            <Link to='/employerDashboard/postJob'>Post A Job</Link>
                         </li>
                         <li>
-                            <Link to='/employerDashboard/viewCategory'>View Categories</Link>
+                            <Link to='/employerDashboard/myPost'>My Post</Link>
                         </li>
                         <li></li>
                     </ul>
