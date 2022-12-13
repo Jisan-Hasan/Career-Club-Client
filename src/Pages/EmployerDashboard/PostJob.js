@@ -6,12 +6,18 @@ import {
     Textarea,
     TextInput,
 } from "flowbite-react";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import { setTitle } from "../../api/title";
+import { AuthContext } from "../../contexts/AuthProvider";
 
 const PostJob = () => {
     setTitle("Post A Job");
+    const { user } = useContext(AuthContext);
     const [categories, setCategories] = useState([]);
+
+    const navigate = useNavigate();
 
     // get all categories
     useEffect(() => {
@@ -30,6 +36,44 @@ const PostJob = () => {
 
         // get form data
         const title = form.title.value;
+        const category_title = form.category.value.split("*")[0];
+        const category_id = form.category.value.split("*")[1];
+        const duration = form.duration.value;
+        const type = form.type.value;
+        const location = form.location.value;
+        const salary = form.salary.value;
+        const experience = form.experience.value;
+        const description = form.description.value;
+
+        // crate job object
+        const job = {
+            title,
+            category_id,
+            category_title,
+            duration,
+            type,
+            location,
+            salary,
+            experience,
+            description,
+            employer_email: user?.email,
+            isApproved: false,
+        };
+        // save to db
+        fetch(`${process.env.REACT_APP_API_URL}/jobs`, {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify(job),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.status) {
+                    // navigate to my job page
+                    navigate("/employerDashboard/myPost");
+                    // show toast
+                    toast.success("Job Posted Successfully!");
+                }
+            });
     };
     return (
         <div className="max-w-2xl mx-auto mt-10  md:mt-14 bg-gray-100 px-12 py-14 rounded-xl divide-y-2">
@@ -46,10 +90,13 @@ const PostJob = () => {
                 </div>
                 {/* Select Category */}
                 <div className="mt-4">
-                    <Select required={true}>
+                    <Select name="category" required={true}>
                         <option value="">Select Job Category</option>
                         {categories.map((category) => (
-                            <option key={category._id} value={category._id}>
+                            <option
+                                key={category._id}
+                                value={category.title + "*" + category._id}
+                            >
                                 {category.title}
                             </option>
                         ))}
@@ -57,21 +104,21 @@ const PostJob = () => {
                 </div>
                 {/* Select JOb Duration */}
                 <div className="mt-4">
-                    <Select required={true}>
+                    <Select name="duration" required={true}>
                         <option value="">Select Job Duration</option>
-                        <option value="part-time">Part Time</option>
-                        <option value="full-time">Full Time</option>
-                        <option value="internship">Internship</option>
-                        <option value="contract">Contract</option>
+                        <option value="Part Time">Part Time</option>
+                        <option value="Full Time">Full Time</option>
+                        <option value="Internship">Internship</option>
+                        <option value="Contract">Contract</option>
                     </Select>
                 </div>
                 {/* Select Work Type */}
                 <div className="mt-4">
-                    <Select required={true}>
+                    <Select name="type" required={true}>
                         <option value="">Select Job Type</option>
-                        <option value="on-site">On Site</option>
-                        <option value="remote">Remote</option>
-                        <option value="hybrid">Hybrid</option>
+                        <option value="On Site">On Site</option>
+                        <option value="Remote">Remote</option>
+                        <option value="Hybrid">Hybrid</option>
                     </Select>
                 </div>
 
@@ -128,7 +175,7 @@ const PostJob = () => {
                 <div className="mt-4">
                     <div id="textarea">
                         <Textarea
-                            id="comment"
+                            name="description"
                             placeholder="Job Description..."
                             required={true}
                             rows={4}
