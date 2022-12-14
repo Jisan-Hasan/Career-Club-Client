@@ -7,11 +7,13 @@ import { GrUserExpert } from "react-icons/gr";
 import { Link } from "react-router-dom";
 import { setTitle } from "../../api/title";
 import { AuthContext } from "../../contexts/AuthProvider";
+import { toast } from "react-hot-toast";
 
 const MyPosts = () => {
     setTitle("My Posts");
     const { user } = useContext(AuthContext);
     const [jobs, setJobs] = useState([]);
+    const [refresh, setRefresh] = useState(false);
     // get employer posted jobs
     useEffect(() => {
         fetch(`${process.env.REACT_APP_API_URL}/jobPost/${user?.email}`)
@@ -21,8 +23,21 @@ const MyPosts = () => {
                     setJobs(data.data);
                 }
             });
-    }, [user]);
-    console.log(jobs);
+    }, [user, refresh]);
+    // console.log(jobs);
+
+    const handleDelete = (id) => {
+        fetch(`${process.env.REACT_APP_API_URL}/job/${id}`, {
+            method: "DELETE",
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.status) {
+                    setRefresh(!refresh);
+                    toast.success("Job Deleted Successfully!");
+                }
+            });
+    };
     return (
         <div>
             <h3 className="text-2xl font-bold text-center">My Posts</h3>
@@ -61,12 +76,18 @@ const MyPosts = () => {
                             </p>
                         </div>
                         <div className="grid grid-cols-2 gap-3">
-                            <Link className="btn w-full btn-outline">
-                                Details
-                            </Link>
-                            <Link className="btn w-full btn-success">
+                            <Link
+                                to={`/employerDashboard/modifyPost/${job._id}`}
+                                className="btn w-full btn-outline"
+                            >
                                 Modify
                             </Link>
+                            <button
+                                onClick={() => handleDelete(job._id)}
+                                className="btn w-full btn-error"
+                            >
+                                Delete
+                            </button>
                         </div>
                     </Card>
                 ))}

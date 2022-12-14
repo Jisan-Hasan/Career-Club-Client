@@ -37,7 +37,6 @@ export const setUserRole = async (email, role) => {
         .then((data) => {
             // set initial package number 0
             if(role === 'employer'){
-                console.log("called");
                 setPostNumber(email, 0);
             }
             return data.status;

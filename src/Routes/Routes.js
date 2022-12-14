@@ -10,6 +10,7 @@ import ViewPackage from "../Pages/AdminDashboard/ViewPackage";
 import Blogs from "../Pages/Blogs/Blogs";
 import BuyPackage from "../Pages/EmployerDashboard/BuyPackage";
 import EmployerDashboard from "../Pages/EmployerDashboard/EmployerDashboard";
+import ModifyPost from "../Pages/EmployerDashboard/ModifyPost";
 import MyPackage from "../Pages/EmployerDashboard/MyPackage";
 import MyPosts from "../Pages/EmployerDashboard/MyPosts";
 import Payment from "../Pages/EmployerDashboard/Payment";
@@ -111,6 +112,14 @@ const router = createBrowserRouter([
             {
                 path: "/employerDashboard/myPost",
                 element: <MyPosts />,
+            },
+            {
+                path: "/employerDashboard/modifyPost/:id",
+                element: <ModifyPost />,
+                loader: ({ params }) =>
+                    fetch(
+                        `${process.env.REACT_APP_API_URL}/job/${params.id}`
+                    ),
             },
         ],
     },

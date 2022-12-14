@@ -31,7 +31,7 @@ const CheckoutForm = ({ pack }) => {
             setPost(Number(data.postNumber));
         });
     }, [user, pack, price]);
-    console.log(post);
+    // console.log(post);
 
     const stripe = useStripe();
     const elements = useElements();
@@ -52,7 +52,7 @@ const CheckoutForm = ({ pack }) => {
         });
 
         if (error) {
-            console.log(error);
+            // console.log(error);
             setCardError(error?.message);
         } else {
             setCardError("");
@@ -85,7 +85,7 @@ const CheckoutForm = ({ pack }) => {
                 email: user?.email,
                 packageId: pack._id,
             };
-            console.log(payment);
+            // console.log(payment);
             fetch(`${process.env.REACT_APP_API_URL}/payment`, {
                 method: "POST",
                 headers: {
