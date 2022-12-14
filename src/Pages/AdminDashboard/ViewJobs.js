@@ -16,6 +16,7 @@ const ViewJobs = () => {
     const [refresh, setRefresh] = useState(false);
     const [deleteModal, setDeleteModal] = useState(false);
     const [approveModal, setApproveModal] = useState(false);
+    const [detailsModal, setDetailsModal] = useState(false);
 
     useEffect(() => {
         fetch(`${process.env.REACT_APP_API_URL}/jobs/${type}`)
@@ -55,6 +56,12 @@ const ViewJobs = () => {
                     }
                 });
         }
+    };
+
+    // handle details button click
+    const handleDetails = (job) => {
+        setSelectedJob(job);
+        setDetailsModal(true);
     };
 
     // handle delete
@@ -146,9 +153,12 @@ const ViewJobs = () => {
                             >
                                 Approve
                             </button>
-                            <Link className="btn w-full btn-outline">
+                            <button
+                                onClick={() => handleDetails(job)}
+                                className="btn w-full btn-outline"
+                            >
                                 Details
-                            </Link>
+                            </button>
 
                             <button
                                 onClick={() => handleDelete(job)}
@@ -236,6 +246,61 @@ const ViewJobs = () => {
                                 </div>
                             </div>
                         </Modal.Body>
+                    </Modal>
+                </React.Fragment>
+            )}
+
+            {/* details modal */}
+            {detailsModal && (
+                <React.Fragment>
+                    <Modal
+                        show={detailsModal}
+                        onClose={() => setDetailsModal(false)}
+                    >
+                        <Modal.Header>{selectedJob.title}</Modal.Header>
+                        <Modal.Body>
+                            <div>
+                                <p className="text-base leading-relaxe dark:text-gray-400 mb-2">
+                                    Category: {selectedJob.category_title}
+                                </p>
+                                <div className="space-y-2">
+                                    <p className="flex items-center gap-2">
+                                        <GoLocation />
+                                        {selectedJob.location}
+                                    </p>
+                                    <p className="flex items-center gap-2">
+                                        <BsAlarm />
+                                        {selectedJob.duration}
+                                    </p>
+                                    <p className="flex items-center gap-2">
+                                        <MdWork />
+                                        {selectedJob.type}
+                                    </p>
+                                    <p className="flex items-center gap-2">
+                                        <GrUserExpert />
+                                        {selectedJob.experience}
+                                    </p>
+                                    <p className="flex items-center gap-2">
+                                        <BsCurrencyDollar />
+                                        <span className="text-lg font-bold">
+                                            {selectedJob.salary}
+                                        </span>
+                                        /month
+                                    </p>
+                                </div>
+                                <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                                    {selectedJob.description}
+                                </p>
+                            </div>
+                        </Modal.Body>
+                        <Modal.Footer className="flex justify-end">
+                            <Button
+                                color="gray"
+                                onClick={() => setDetailsModal(false)}
+                            >
+                                Close
+                            </Button>
+                        </Modal.Footer>
                     </Modal>
                 </React.Fragment>
             )}
