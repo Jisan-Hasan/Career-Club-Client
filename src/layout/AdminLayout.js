@@ -43,6 +43,8 @@ const AdminLayout = () => {
                         <li></li>
                         <li><Link to='/adminDashboard/jobs'>All Jobs</Link></li>
                         <li></li>
+                        <li><Link to='/adminDashboard/payments'>All Payments</Link></li>
+                        <li></li>
                     </ul>
                 </div>
             </div>

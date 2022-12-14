@@ -5,6 +5,7 @@ import Main from "../layout/Main";
 import AddCategories from "../Pages/AdminDashboard/AddCategories";
 import AddPackage from "../Pages/AdminDashboard/AddPackage";
 import AdminDashboard from "../Pages/AdminDashboard/AdminDashboard";
+import AllPayment from "../Pages/AdminDashboard/AllPayment";
 import ViewCategories from "../Pages/AdminDashboard/ViewCategories";
 import ViewJobs from "../Pages/AdminDashboard/ViewJobs";
 import ViewPackage from "../Pages/AdminDashboard/ViewPackage";
@@ -80,6 +81,10 @@ const router = createBrowserRouter([
                 path: "/adminDashboard/jobs",
                 element: <ViewJobs />,
             },
+            {
+                path: "/adminDashboard/payments",
+                element: <AllPayment />,
+            },
         ],
     },
     {
@@ -125,6 +130,14 @@ const router = createBrowserRouter([
                     fetch(`${process.env.REACT_APP_API_URL}/job/${params.id}`),
             },
         ],
+    },
+    {
+        path: "/userDashboard",
+        element: (
+            <PrivateRoute>
+                <p>User Dashboard</p>
+            </PrivateRoute>
+        ),
     },
 ]);
 
