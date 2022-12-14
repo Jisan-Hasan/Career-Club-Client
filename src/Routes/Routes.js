@@ -6,6 +6,7 @@ import AddCategories from "../Pages/AdminDashboard/AddCategories";
 import AddPackage from "../Pages/AdminDashboard/AddPackage";
 import AdminDashboard from "../Pages/AdminDashboard/AdminDashboard";
 import ViewCategories from "../Pages/AdminDashboard/ViewCategories";
+import ViewJobs from "../Pages/AdminDashboard/ViewJobs";
 import ViewPackage from "../Pages/AdminDashboard/ViewPackage";
 import Blogs from "../Pages/Blogs/Blogs";
 import BuyPackage from "../Pages/EmployerDashboard/BuyPackage";
@@ -75,6 +76,10 @@ const router = createBrowserRouter([
                 path: "/adminDashboard/viewCategory",
                 element: <ViewCategories />,
             },
+            {
+                path: "/adminDashboard/jobs",
+                element: <ViewJobs />,
+            },
         ],
     },
     {
@@ -117,9 +122,7 @@ const router = createBrowserRouter([
                 path: "/employerDashboard/modifyPost/:id",
                 element: <ModifyPost />,
                 loader: ({ params }) =>
-                    fetch(
-                        `${process.env.REACT_APP_API_URL}/job/${params.id}`
-                    ),
+                    fetch(`${process.env.REACT_APP_API_URL}/job/${params.id}`),
             },
         ],
     },

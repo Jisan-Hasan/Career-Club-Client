@@ -41,6 +41,8 @@ const AdminLayout = () => {
                             <Link to='/adminDashboard/viewCategory'>View Categories</Link>
                         </li>
                         <li></li>
+                        <li><Link to='/adminDashboard/jobs'>All Jobs</Link></li>
+                        <li></li>
                     </ul>
                 </div>
             </div>
