@@ -1,7 +1,8 @@
-import { Card, Select } from "flowbite-react";
+import { Button, Card, Modal, Select } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { BsAlarm, BsCurrencyDollar } from "react-icons/bs";
+import { FaExclamationTriangle } from "react-icons/fa";
 import { FcApproval, FcDisapprove } from "react-icons/fc";
 import { GoLocation } from "react-icons/go";
 import { GrUserExpert } from "react-icons/gr";
@@ -12,7 +13,10 @@ import { setApprovedStatus } from "../../api/job";
 const ViewJobs = () => {
     const [type, setType] = useState("all");
     const [jobs, setJobs] = useState([]);
+    const [selectedJob, setSelectedJob] = useState("");
     const [refresh, setRefresh] = useState(false);
+    const [deleteModal, setDeleteModal] = useState(false);
+    const [approveModal, setApproveModal] = useState(false);
 
     useEffect(() => {
         fetch(`${process.env.REACT_APP_API_URL}/jobs/${type}`)
@@ -33,16 +37,24 @@ const ViewJobs = () => {
 
     // handle delete
     const handleDelete = (id) => {
-        fetch(`${process.env.REACT_APP_API_URL}/job/${id}`, {
-            method: "DELETE",
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.status) {
-                    setRefresh(!refresh);
-                    toast.success("Job Deleted Successfully!");
-                }
-            });
+        setSelectedJob(id);
+        setDeleteModal(true);
+    };
+    // handle confirm delete
+    const handleConfirmDelete = (isConfirm) => {
+        setDeleteModal(false);
+        if (isConfirm) {
+            fetch(`${process.env.REACT_APP_API_URL}/job/${selectedJob}`, {
+                method: "DELETE",
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.status) {
+                        setRefresh(!refresh);
+                        toast.success("Job Deleted Successfully!");
+                    }
+                });
+        }
     };
     return (
         <div>
@@ -125,6 +137,44 @@ const ViewJobs = () => {
                     </Card>
                 ))}
             </div>
+            {/* delete modal */}
+            {deleteModal && (
+                <React.Fragment>
+                    <Modal
+                        show={true}
+                        size="md"
+                        popup={true}
+                        onClose={() => setDeleteModal(false)}
+                    >
+                        <Modal.Header />
+                        <Modal.Body>
+                            <div className="text-center">
+                                <FaExclamationTriangle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
+                                <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                                    Are you sure you want to delete this
+                                    Category?
+                                </h3>
+                                <div className="flex justify-center gap-4">
+                                    <Button
+                                        color="failure"
+                                        onClick={() => handleConfirmDelete(true)}
+                                    >
+                                        Yes, I'm sure
+                                    </Button>
+                                    <Button
+                                        color="gray"
+                                        onClick={() =>
+                                            handleConfirmDelete(false)
+                                        }
+                                    >
+                                        No, cancel
+                                    </Button>
+                                </div>
+                            </div>
+                        </Modal.Body>
+                    </Modal>
+                </React.Fragment>
+            )}
         </div>
     );
 };
