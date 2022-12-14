@@ -7,6 +7,7 @@ import { GoLocation } from "react-icons/go";
 import { GrUserExpert } from "react-icons/gr";
 import { MdWork } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { setApprovedStatus } from "../../api/job";
 
 const ViewJobs = () => {
     const [type, setType] = useState("all");
@@ -21,14 +22,14 @@ const ViewJobs = () => {
                     setJobs(data.data);
                 }
             });
-    }, [type]);
-    console.log(jobs);
+    }, [type, refresh]);
+    // console.log(jobs);
 
     // handle approve
-    const handleApprove = id => {
-
-    }
-
+    const handleApprove = (id) => {
+        setApprovedStatus(id, true);
+        setRefresh(!refresh);
+    };
 
     // handle delete
     const handleDelete = (id) => {
@@ -47,7 +48,10 @@ const ViewJobs = () => {
         <div>
             <h2 className="text-center text-2xl font-bold">All Jobs</h2>
             {/* filter */}
-            <div className="absolute right-7 mt-[-40px] flex items-center gap-2" id="select">
+            <div
+                className="absolute right-7 lg:right-36 xl:right-44 mt-[-35px] flex items-center gap-2"
+                id="select"
+            >
                 {/* <div>
                     <Label htmlFor="" value="Filter Jobs" />
                 </div> */}
@@ -101,18 +105,16 @@ const ViewJobs = () => {
                             </p>
                         </div>
                         <div className="grid grid-cols-3 gap-2">
-                        <button
+                            <button
                                 onClick={() => handleApprove(job._id)}
                                 className="btn w-full btn-primary"
                             >
                                 Approve
                             </button>
-                            <Link
-                                className="btn w-full btn-outline"
-                            >
+                            <Link className="btn w-full btn-outline">
                                 Details
                             </Link>
-                            
+
                             <button
                                 onClick={() => handleDelete(job._id)}
                                 className="btn w-full btn-error"
