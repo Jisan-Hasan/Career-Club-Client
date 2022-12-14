@@ -9,6 +9,7 @@ import {
 import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { setPostNumber } from "../../api/pack";
 import { setTitle } from "../../api/title";
 import { AuthContext } from "../../contexts/AuthProvider";
 
@@ -16,8 +17,23 @@ const PostJob = () => {
     setTitle("Post A Job");
     const { user } = useContext(AuthContext);
     const [categories, setCategories] = useState([]);
+    const [postLimit, setPostLimit] = useState(0);
 
     const navigate = useNavigate();
+
+    // get available post number
+    useEffect(() => {
+        fetch(`${process.env.REACT_APP_API_URL}/postNumber/${user?.email}`)
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.postNumber < 1) {
+                    navigate("/employerDashboard/buyPackage");
+                    toast.error("Please Buy a Package for Job Post");
+                } else {
+                    setPostLimit(Number(data.postNumber));
+                }
+            });
+    }, [user]);
 
     // get all categories
     useEffect(() => {
@@ -68,10 +84,13 @@ const PostJob = () => {
             .then((res) => res.json())
             .then((data) => {
                 if (data.status) {
+                    // reduce post limit
+                    setPostNumber(user?.email, Number(postLimit-1));
                     // navigate to my job page
                     navigate("/employerDashboard/myPost");
                     // show toast
                     toast.success("Job Posted Successfully!");
+                    
                 }
             });
     };
