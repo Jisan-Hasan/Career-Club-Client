@@ -2,13 +2,12 @@ import { Button, Card, Modal, Select } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { BsAlarm, BsCurrencyDollar } from "react-icons/bs";
-import { FaExclamationTriangle } from "react-icons/fa";
+import { FaExclamationTriangle, FaQuestion } from "react-icons/fa";
 import { FcApproval, FcDisapprove } from "react-icons/fc";
 import { GoLocation } from "react-icons/go";
 import { GrUserExpert } from "react-icons/gr";
 import { MdWork } from "react-icons/md";
 import { Link } from "react-router-dom";
-import { setApprovedStatus } from "../../api/job";
 
 const ViewJobs = () => {
     const [type, setType] = useState("all");
@@ -30,21 +29,44 @@ const ViewJobs = () => {
     // console.log(jobs);
 
     // handle approve
-    const handleApprove = (id) => {
-        setApprovedStatus(id, true);
-        setRefresh(!refresh);
+    const handleApprove = (job) => {
+        setSelectedJob(job);
+        setApproveModal(true);
+    };
+    // handle confirm approve
+    const handleConfirmApprove = (isConfirm) => {
+        setApproveModal(false);
+        if (isConfirm) {
+            fetch(
+                `${process.env.REACT_APP_API_URL}/jobStatus/${selectedJob._id}`,
+                {
+                    method: "PATCH",
+                    headers: {
+                        "content-type": "application/json",
+                    },
+                    body: JSON.stringify({ status: true }),
+                }
+            )
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.status) {
+                        toast.success("Job Approved!");
+                        setRefresh(!refresh);
+                    }
+                });
+        }
     };
 
     // handle delete
-    const handleDelete = (id) => {
-        setSelectedJob(id);
+    const handleDelete = (job) => {
+        setSelectedJob(job);
         setDeleteModal(true);
     };
     // handle confirm delete
     const handleConfirmDelete = (isConfirm) => {
         setDeleteModal(false);
         if (isConfirm) {
-            fetch(`${process.env.REACT_APP_API_URL}/job/${selectedJob}`, {
+            fetch(`${process.env.REACT_APP_API_URL}/job/${selectedJob._id}`, {
                 method: "DELETE",
             })
                 .then((res) => res.json())
@@ -118,7 +140,8 @@ const ViewJobs = () => {
                         </div>
                         <div className="grid grid-cols-3 gap-2">
                             <button
-                                onClick={() => handleApprove(job._id)}
+                                onClick={() => handleApprove(job)}
+                                disabled={job.isApproved}
                                 className="btn w-full btn-primary"
                             >
                                 Approve
@@ -128,7 +151,7 @@ const ViewJobs = () => {
                             </Link>
 
                             <button
-                                onClick={() => handleDelete(job._id)}
+                                onClick={() => handleDelete(job)}
                                 className="btn w-full btn-error"
                             >
                                 Delete
@@ -151,13 +174,14 @@ const ViewJobs = () => {
                             <div className="text-center">
                                 <FaExclamationTriangle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
                                 <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                                    Are you sure you want to delete this
-                                    Category?
+                                    Are you sure you want to delete this Job?
                                 </h3>
                                 <div className="flex justify-center gap-4">
                                     <Button
                                         color="failure"
-                                        onClick={() => handleConfirmDelete(true)}
+                                        onClick={() =>
+                                            handleConfirmDelete(true)
+                                        }
                                     >
                                         Yes, I'm sure
                                     </Button>
@@ -165,6 +189,46 @@ const ViewJobs = () => {
                                         color="gray"
                                         onClick={() =>
                                             handleConfirmDelete(false)
+                                        }
+                                    >
+                                        No, cancel
+                                    </Button>
+                                </div>
+                            </div>
+                        </Modal.Body>
+                    </Modal>
+                </React.Fragment>
+            )}
+
+            {/* delete modal */}
+            {approveModal && (
+                <React.Fragment>
+                    <Modal
+                        show={approveModal}
+                        size="md"
+                        popup={true}
+                        onClose={() => setApproveModal(false)}
+                    >
+                        <Modal.Header />
+                        <Modal.Body>
+                            <div className="text-center">
+                                <FaQuestion className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
+                                <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                                    Are you sure you want to approve this Job?
+                                </h3>
+                                <div className="flex justify-center gap-4">
+                                    <Button
+                                        color="failure"
+                                        onClick={() =>
+                                            handleConfirmApprove(true)
+                                        }
+                                    >
+                                        Yes, I'm sure
+                                    </Button>
+                                    <Button
+                                        color="gray"
+                                        onClick={() =>
+                                            handleConfirmApprove(false)
                                         }
                                     >
                                         No, cancel
