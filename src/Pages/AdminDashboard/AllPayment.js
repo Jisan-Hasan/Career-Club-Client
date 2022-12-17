@@ -3,16 +3,16 @@ import React, { useEffect, useState } from "react";
 
 const AllPayment = () => {
     const [payments, setPayments] = useState([]);
-    useEffect(()=> {
+    useEffect(() => {
         fetch(`${process.env.REACT_APP_API_URL}/payments`)
-        .then(res => res.json())
-        .then(data => {
-            if(data.status){
-                setPayments(data.data);
-            }
-        })
-    }, [])
-    console.log(payments)
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.status) {
+                    setPayments(data.data);
+                }
+            });
+    }, []);
+    console.log(payments);
     return (
         <div>
             <h3 className="text-center text-3xl font-bold">All Payments!</h3>
@@ -42,7 +42,6 @@ const AllPayment = () => {
                                 <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                                     {payment.price}
                                 </Table.Cell>
-                                
                             </Table.Row>
                         ))}
                     </Table.Body>

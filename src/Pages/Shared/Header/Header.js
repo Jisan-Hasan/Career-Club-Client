@@ -1,4 +1,4 @@
-import { Button, Navbar } from "flowbite-react";
+import { Avatar, Button, Navbar } from "flowbite-react";
 import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { FaHamburger } from "react-icons/fa";
@@ -48,7 +48,15 @@ const Header = () => {
                         CareerClub
                     </span>
                 </Link>
-                <div className="flex md:order-2">
+                <div className="flex gap-2 md:order-2">
+                    {
+                        user?.uid && <Avatar
+                        img={user.photoURL}
+                        rounded={true}
+                        bordered={true}
+                        color="success"
+                      />
+                    }
                     {user ? (
                         <Button
                             onClick={handleLogout}
