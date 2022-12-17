@@ -20,6 +20,7 @@ import PostJob from "../Pages/EmployerDashboard/PostJob";
 import Login from "../Pages/Login/Login";
 import Signup from "../Pages/Login/Signup";
 import PrivateRoute from "./PrivateRoute";
+import Home from "../Pages/Home/Home";
 
 const router = createBrowserRouter([
     {
@@ -29,7 +30,7 @@ const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <p>Home</p>,
+                element: <Home />,
             },
             {
                 path: "/login",
