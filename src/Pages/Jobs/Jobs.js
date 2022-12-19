@@ -2,9 +2,10 @@ import { Card, Label, Radio, Select } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { setTitle } from "../../api/title";
+import JobCard from "./JobCard";
 
 const Jobs = () => {
-    setTitle('Jobs')
+    setTitle("Jobs");
     const [categories, setCategories] = useState([]);
     const [category, setCategory] = useState("all");
     const [experience, setExperience] = useState("all");
@@ -12,7 +13,9 @@ const Jobs = () => {
     const [duration, setDuration] = useState("all");
     const [searchStr, setSearchStr] = useState("");
 
-    console.log(category, experience, type, duration, searchStr);
+    const [jobs, setJobs] = useState([]);
+
+    // console.log(category, experience, type, duration, searchStr);
     // get all categories
     useEffect(() => {
         fetch(`${process.env.REACT_APP_API_URL}/category`)
@@ -23,6 +26,21 @@ const Jobs = () => {
                 }
             });
     }, []);
+
+    // get jobs
+    useEffect(() => {
+        fetch(
+            `${process.env.REACT_APP_API_URL}/jobs/?category=${category}&experience=${experience}&type=${type}&duration=${duration}&searchStr=${searchStr}`
+        )
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.status) {
+                    setJobs(data.data);
+                }
+            });
+    }, [category, experience, type, duration, searchStr]);
+
+    console.log(jobs);
     return (
         <div className="container mx-auto">
             <div className="drawer drawer-mobile">
@@ -103,7 +121,12 @@ const Jobs = () => {
                         </button>
                     </form>
 
-                    <Outlet />
+                    {/* All Jobs Shown here */}
+                    <div className='mt-5 grid md:grid-cols-2 lg:grid-cols-3 gap-3'>
+                        {jobs.map((job) => (
+                            <JobCard key={job._id} job={job} />
+                        ))}
+                    </div>
                 </div>
                 <div className="drawer-side scroll-smooth">
                     <label
@@ -165,7 +188,9 @@ const Jobs = () => {
                                                 name="experience"
                                                 value="Fresher"
                                             />
-                                            <Label htmlFor="fresher">Fresher</Label>
+                                            <Label htmlFor="fresher">
+                                                Fresher
+                                            </Label>
                                         </div>
                                         <div className="flex items-center gap-x-2">
                                             <Radio
@@ -173,7 +198,9 @@ const Jobs = () => {
                                                 name="experience"
                                                 value="1-3 years"
                                             />
-                                            <Label htmlFor="mid">1-3 years</Label>
+                                            <Label htmlFor="mid">
+                                                1-3 years
+                                            </Label>
                                         </div>
                                         <div className="flex items-center gap-x-2">
                                             <Radio
@@ -181,7 +208,9 @@ const Jobs = () => {
                                                 name="experience"
                                                 value="3-5 years"
                                             />
-                                            <Label htmlFor="senior">3-5 years</Label>
+                                            <Label htmlFor="senior">
+                                                3-5 years
+                                            </Label>
                                         </div>
                                         <div className="flex items-center gap-x-2">
                                             <Radio
@@ -189,7 +218,9 @@ const Jobs = () => {
                                                 name="experience"
                                                 value="5+ years"
                                             />
-                                            <Label htmlFor="expert">5+ years</Label>
+                                            <Label htmlFor="expert">
+                                                5+ years
+                                            </Label>
                                         </div>
                                     </div>
                                 </fieldset>
@@ -215,7 +246,9 @@ const Jobs = () => {
                                                 value="all"
                                                 defaultChecked
                                             />
-                                            <Label htmlFor="type-all">All</Label>
+                                            <Label htmlFor="type-all">
+                                                All
+                                            </Label>
                                         </div>
                                         <div className="flex items-center gap-x-2">
                                             <Radio
@@ -223,7 +256,9 @@ const Jobs = () => {
                                                 name="type"
                                                 value="On Site"
                                             />
-                                            <Label htmlFor="on-site">On Site</Label>
+                                            <Label htmlFor="on-site">
+                                                On Site
+                                            </Label>
                                         </div>
                                         <div className="flex items-center gap-x-2">
                                             <Radio
@@ -231,7 +266,9 @@ const Jobs = () => {
                                                 name="type"
                                                 value="Remote"
                                             />
-                                            <Label htmlFor="Remote">Remote</Label>
+                                            <Label htmlFor="Remote">
+                                                Remote
+                                            </Label>
                                         </div>
                                         <div className="flex items-center gap-x-2">
                                             <Radio
@@ -239,7 +276,9 @@ const Jobs = () => {
                                                 name="type"
                                                 value="Hybrid"
                                             />
-                                            <Label htmlFor="Hybrid">Hybrid</Label>
+                                            <Label htmlFor="Hybrid">
+                                                Hybrid
+                                            </Label>
                                         </div>
                                     </div>
                                 </fieldset>
@@ -268,16 +307,19 @@ const Jobs = () => {
                                                 value="all"
                                                 defaultChecked
                                             />
-                                            <Label htmlFor="duration-all">All</Label>
+                                            <Label htmlFor="duration-all">
+                                                All
+                                            </Label>
                                         </div>
                                         <div className="flex items-center gap-x-2">
                                             <Radio
                                                 id="part-time"
                                                 name="duration"
                                                 value="Part Time"
-                                                
                                             />
-                                            <Label htmlFor="part-time">Part Time</Label>
+                                            <Label htmlFor="part-time">
+                                                Part Time
+                                            </Label>
                                         </div>
                                         <div className="flex items-center gap-x-2">
                                             <Radio
@@ -285,7 +327,9 @@ const Jobs = () => {
                                                 name="duration"
                                                 value="Full Time"
                                             />
-                                            <Label htmlFor="full-time">Full Time</Label>
+                                            <Label htmlFor="full-time">
+                                                Full Time
+                                            </Label>
                                         </div>
                                         <div className="flex items-center gap-x-2">
                                             <Radio
@@ -293,7 +337,9 @@ const Jobs = () => {
                                                 name="duration"
                                                 value="Internship"
                                             />
-                                            <Label htmlFor="Internship">Internship</Label>
+                                            <Label htmlFor="Internship">
+                                                Internship
+                                            </Label>
                                         </div>
                                         <div className="flex items-center gap-x-2">
                                             <Radio
@@ -301,7 +347,9 @@ const Jobs = () => {
                                                 name="duration"
                                                 value="Contract"
                                             />
-                                            <Label htmlFor="Contract">Contract</Label>
+                                            <Label htmlFor="Contract">
+                                                Contract
+                                            </Label>
                                         </div>
                                     </div>
                                 </fieldset>
