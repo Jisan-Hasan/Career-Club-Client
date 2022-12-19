@@ -1,7 +1,4 @@
 import { createBrowserRouter } from "react-router-dom";
-import AdminLayout from "../layout/AdminLayout";
-import EmployerLayout from "../layout/EmployerLayout";
-import Main from "../layout/Main";
 import AddCategories from "../Pages/AdminDashboard/AddCategories";
 import AddPackage from "../Pages/AdminDashboard/AddPackage";
 import AdminDashboard from "../Pages/AdminDashboard/AdminDashboard";
@@ -17,10 +14,14 @@ import MyPackage from "../Pages/EmployerDashboard/MyPackage";
 import MyPosts from "../Pages/EmployerDashboard/MyPosts";
 import Payment from "../Pages/EmployerDashboard/Payment";
 import PostJob from "../Pages/EmployerDashboard/PostJob";
+import Home from "../Pages/Home/Home";
+import Jobs from "../Pages/Jobs/Jobs";
 import Login from "../Pages/Login/Login";
 import Signup from "../Pages/Login/Signup";
+import AdminLayout from "../layout/AdminLayout";
+import EmployerLayout from "../layout/EmployerLayout";
+import Main from "../layout/Main";
 import PrivateRoute from "./PrivateRoute";
-import Home from "../Pages/Home/Home";
 
 const router = createBrowserRouter([
     {
@@ -42,11 +43,12 @@ const router = createBrowserRouter([
             },
             {
                 path: "/blogs",
-                element: (
-                    <PrivateRoute>
-                        <Blogs />
-                    </PrivateRoute>
-                ),
+                element: <Blogs />,
+            },
+            {
+                path: "/jobs",
+                element: <Jobs />,
+                
             },
         ],
     },

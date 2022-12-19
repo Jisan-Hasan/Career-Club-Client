@@ -31,12 +31,11 @@ const Header = () => {
                     }
                 }
             });
-        // if(user?.)
     }, [user]);
 
     return (
         <>
-            <Navbar className="my-4 shadow-sm" fluid={true} rounded={true}>
+            <Navbar className="mb-4 shadow-sm sticky top-0 z-50" fluid={true} rounded={true}>
                 <label
                     htmlFor="my-drawer-2"
                     className="drawer-button lg:hidden"
@@ -55,6 +54,7 @@ const Header = () => {
                         rounded={true}
                         bordered={true}
                         color="success"
+                        title={user?.displayName}
                       />
                     }
                     {user ? (
@@ -78,8 +78,8 @@ const Header = () => {
                     <Link to="/" className="hover:text-blue-600">
                         Home
                     </Link>
-                    <Link className="hover:text-blue-600" to="/services">
-                        Services
+                    <Link className="hover:text-blue-600" to="/jobs">
+                        Jobs
                     </Link>
                     <Link to="/blogs" className="hover:text-blue-600">
                         Blogs
