@@ -1,12 +1,15 @@
-import { Avatar, Button, Navbar } from "flowbite-react";
+import { Avatar, Button, Dropdown, Navbar } from "flowbite-react";
 import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
-import { FaHamburger } from "react-icons/fa";
+import { FaHamburger, FaPersonBooth, FaSignOutAlt } from "react-icons/fa";
+import { BsFillPersonPlusFill, BsPersonCircle } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../contexts/AuthProvider";
+import { MdOutlineForwardToInbox } from "react-icons/md";
 
 const Header = () => {
     const { user, logout } = useContext(AuthContext);
+
     const handleLogout = () => {
         logout()
             .then(() => {})
@@ -35,7 +38,11 @@ const Header = () => {
 
     return (
         <>
-            <Navbar className="mb-4 shadow-sm sticky top-0 z-50" fluid={true} rounded={true}>
+            <Navbar
+                className="mb-4 shadow-sm sticky top-0 z-50"
+                fluid={true}
+                rounded={true}
+            >
                 <label
                     htmlFor="my-drawer-2"
                     className="drawer-button lg:hidden"
@@ -48,24 +55,55 @@ const Header = () => {
                     </span>
                 </Link>
                 <div className="flex gap-2 md:order-2">
-                    {
-                        user?.uid && <Avatar
-                        img={user.photoURL}
-                        rounded={true}
-                        bordered={true}
-                        color="success"
-                        title={user?.displayName}
-                      />
-                    }
-                    {user ? (
-                        <Button
-                            onClick={handleLogout}
-                            color="failure"
-                            pill={true}
+                    {user?.uid && (
+                        <Dropdown
+                            arrowIcon={false}
+                            inline={true}
+                            label={
+                                <Avatar
+                                    img={user?.photoURL}
+                                    rounded={true}
+                                    bordered={true}
+                                    color="success"
+                                    title={user?.displayName}
+                                />
+                            }
                         >
-                            Sign Out
-                        </Button>
-                    ) : (
+                            <Dropdown.Header>
+                                <span className="block text-sm text-center">
+                                    {user?.displayName}
+                                </span>
+                                <span className="block truncate text-sm font-medium text-center">
+                                    {user?.email}
+                                </span>
+                            </Dropdown.Header>
+                            <Dropdown.Item className="flex gap-2">
+                                <BsPersonCircle /> My Profile
+                            </Dropdown.Item>
+                            <Dropdown.Item className="flex gap-2">
+                                <BsFillPersonPlusFill /> Update Profile
+                            </Dropdown.Item>
+                            <Dropdown.Item className="flex gap-2">
+                                <MdOutlineForwardToInbox /> My Inbox
+                            </Dropdown.Item>
+                            <Dropdown.Divider />
+                            <Dropdown.Item
+                                className="flex gap-2"
+                                onClick={handleLogout}
+                            >
+                                <FaSignOutAlt />
+                                Sign out
+                            </Dropdown.Item>
+                        </Dropdown>
+                    )}
+                    {!user && (
+                        // <Button
+                        //     onClick={handleLogout}
+                        //     color="failure"
+                        //     pill={true}
+                        // >
+                        //     Sign Out
+                        // </Button>
                         <Link to="/login">
                             <Button color="success" pill={true}>
                                 Login
@@ -84,10 +122,7 @@ const Header = () => {
                     <Link to="/blogs" className="hover:text-blue-600">
                         Blogs
                     </Link>
-                    <Link
-                        to={`${path}`}
-                        className="hover:text-blue-600"
-                    >
+                    <Link to={`${path}`} className="hover:text-blue-600">
                         Dashboard
                     </Link>
                 </Navbar.Collapse>
