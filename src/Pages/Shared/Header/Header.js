@@ -1,14 +1,28 @@
 import { Avatar, Button, Dropdown, Navbar } from "flowbite-react";
 import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
-import { FaHamburger, FaPersonBooth, FaSignOutAlt } from "react-icons/fa";
 import { BsFillPersonPlusFill, BsPersonCircle } from "react-icons/bs";
+import { FaHamburger, FaSignOutAlt } from "react-icons/fa";
+import { MdOutlineForwardToInbox } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../contexts/AuthProvider";
-import { MdOutlineForwardToInbox } from "react-icons/md";
 
 const Header = () => {
     const { user, logout } = useContext(AuthContext);
+    const [role, setRole] = useState("");
+
+    // get user role
+    useEffect(() => {
+        fetch(`${process.env.REACT_APP_API_URL}/userRole/${user?.email}`)
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.status) {
+                    setRole(data.data);
+                }
+            });
+    }, [user]);
+
+    console.log(role);
 
     const handleLogout = () => {
         logout()
@@ -70,26 +84,32 @@ const Header = () => {
                             }
                         >
                             <Dropdown.Header>
-                                <span className="block text-sm text-center">
+                                <span className="block text-xl font-semibold text-center">
                                     {user?.displayName}
                                 </span>
                                 <span className="block truncate text-sm font-medium text-center">
                                     {user?.email}
                                 </span>
                             </Dropdown.Header>
-                            <Dropdown.Item className="flex gap-2">
-                                <BsPersonCircle /> My Profile
-                            </Dropdown.Item>
-                            <Dropdown.Item className="flex gap-2">
-                                <BsFillPersonPlusFill /> Update Profile
-                            </Dropdown.Item>
-                            <Dropdown.Item className="flex gap-2">
-                                <MdOutlineForwardToInbox /> My Inbox
-                            </Dropdown.Item>
-                            <Dropdown.Divider />
+                            {role === "job-seeker" && (
+                                <>
+                                    <Dropdown.Item className="flex gap-2">
+                                        <BsPersonCircle /> My Profile
+                                    </Dropdown.Item>
+                                    <Dropdown.Item className="flex gap-2">
+                                        <BsFillPersonPlusFill /> Update Profile
+                                    </Dropdown.Item>
+                                    <Dropdown.Item className="flex gap-2">
+                                        <MdOutlineForwardToInbox /> My Inbox
+                                    </Dropdown.Item>
+                                    <Dropdown.Divider />
+                                </>
+                            )}
+
                             <Dropdown.Item
-                                className="flex gap-2"
+                                className="flex gap-2 text-red-600"
                                 onClick={handleLogout}
+                                
                             >
                                 <FaSignOutAlt />
                                 Sign out

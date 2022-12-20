@@ -22,15 +22,15 @@ const Home = () => {
                         Team
                     </p>
                     <Link to='/jobs'
-                        class="focus:!ring-2 group flex-1 h-min items-center justify-center p-0.5 text-center font-medium focus:z-10 rounded-full bg-emerald-400 px-6 py-2 mt-8 text-white"
+                        className="focus:!ring-2 group flex-1 h-min items-center justify-center p-0.5 text-center font-medium focus:z-10 rounded-full bg-emerald-400 px-6 py-2 mt-8 text-white"
                         type="button"
                     >
-                        <span class="flex items-center rounded-md text-sm px-4 py-2 uppercase">
+                        <span className="flex items-center rounded-md text-sm px-4 py-2 uppercase">
                             Explore Jobs
                         </span>
                     </Link>
                 </div>
-                <div class="self-center">
+                <div className="self-center">
                     <img
                         src="https://service-e74b1.web.app/static/media/image.6f936b291abc81b147fc.jpg"
                         alt=""
