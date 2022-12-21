@@ -40,7 +40,7 @@ const Jobs = () => {
             });
     }, [category, experience, type, duration, searchStr]);
 
-    console.log(jobs);
+    // console.log(jobs);
     return (
         <div className="container mx-auto">
             <div className="drawer drawer-mobile">
@@ -52,7 +52,7 @@ const Jobs = () => {
                 <div className="drawer-content">
                     {/* search box */}
 
-                    <form className="flex items-center max-w-lg mx-2 md:mx-auto">
+                    <div className="flex items-center max-w-lg mx-2 md:mx-auto">
                         <label htmlFor="voice-search" className="sr-only">
                             Search
                         </label>
@@ -98,7 +98,7 @@ const Jobs = () => {
                                 </svg>
                             </button>
                         </div>
-                        <button
+                        {/* <button
                             type="submit"
                             className="inline-flex items-center py-2.5 px-3 ml-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                         >
@@ -118,8 +118,8 @@ const Jobs = () => {
                                 ></path>
                             </svg>
                             Search
-                        </button>
-                    </form>
+                        </button> */}
+                    </div>
 
                     {/* All Jobs Shown here */}
                     <div className='mt-5 grid md:grid-cols-2 lg:grid-cols-3 gap-3'>

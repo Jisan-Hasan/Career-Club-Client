@@ -8,7 +8,7 @@ import { MdWork } from 'react-icons/md';
 
 const JobCard = ({job}) => {
     return (
-        <Card key={job._id}>
+        <Card key={job._id} className='cursor-pointer'>
                         <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white flex items-center justify-between">
                             <span>{job.title}</span>
                             <span>
@@ -19,7 +19,7 @@ const JobCard = ({job}) => {
                                 )}
                             </span>
                         </h5>
-                        <p className="font-normal text-gray-700 dark:text-gray-400">
+                        <p className="font-semibold text-md text-gray-700 dark:text-gray-400">
                             {job.category_title}
                         </p>
                         <div className="space-y-2">
@@ -47,16 +47,16 @@ const JobCard = ({job}) => {
                                 /month
                             </p>
                         </div>
-                        <div className="grid gap-2">
+                        {/* <div className="grid gap-2">
                             
                             <button
-                                className="btn w-full btn-outline"
+                                className="btn w-full text-md font-bold btn-outline duration-500 tracking-wider"
                             >
                                 Details
                             </button>
 
                             
-                        </div>
+                        </div> */}
                     </Card>
     );
 };

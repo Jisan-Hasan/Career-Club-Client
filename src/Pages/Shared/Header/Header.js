@@ -1,7 +1,7 @@
 import { Avatar, Button, Dropdown, Navbar } from "flowbite-react";
 import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
-import { BsFillPersonPlusFill, BsPersonCircle } from "react-icons/bs";
+import { BsPersonCircle, BsPersonPlusFill } from "react-icons/bs";
 import { FaHamburger, FaSignOutAlt } from "react-icons/fa";
 import { MdOutlineForwardToInbox } from "react-icons/md";
 import { Link } from "react-router-dom";
@@ -22,7 +22,6 @@ const Header = () => {
             });
     }, [user]);
 
-    console.log(role);
 
     const handleLogout = () => {
         logout()
@@ -92,24 +91,23 @@ const Header = () => {
                                 </span>
                             </Dropdown.Header>
                             {role === "job-seeker" && (
-                                <>
-                                    <Dropdown.Item className="flex gap-2">
+                                <div className="space-y-2">
+                                    <Link to='/profile' className="flex gap-2 pl-4 items-center">
                                         <BsPersonCircle /> My Profile
-                                    </Dropdown.Item>
-                                    <Dropdown.Item className="flex gap-2">
-                                        <BsFillPersonPlusFill /> Update Profile
-                                    </Dropdown.Item>
-                                    <Dropdown.Item className="flex gap-2">
+                                    </Link>
+                                    <Link to='/updateProfile' className="flex gap-2 pl-4 items-center">
+                                        <BsPersonPlusFill /> Update Profile
+                                    </Link>
+                                    <Link className="flex gap-2 pl-4 items-center">
                                         <MdOutlineForwardToInbox /> My Inbox
-                                    </Dropdown.Item>
+                                    </Link>
                                     <Dropdown.Divider />
-                                </>
+                                </div>
                             )}
 
                             <Dropdown.Item
                                 className="flex gap-2 text-red-600"
                                 onClick={handleLogout}
-                                
                             >
                                 <FaSignOutAlt />
                                 Sign out
@@ -117,13 +115,6 @@ const Header = () => {
                         </Dropdown>
                     )}
                     {!user && (
-                        // <Button
-                        //     onClick={handleLogout}
-                        //     color="failure"
-                        //     pill={true}
-                        // >
-                        //     Sign Out
-                        // </Button>
                         <Link to="/login">
                             <Button color="success" pill={true}>
                                 Login

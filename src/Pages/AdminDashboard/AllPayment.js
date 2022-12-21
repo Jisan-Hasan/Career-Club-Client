@@ -12,7 +12,7 @@ const AllPayment = () => {
                 }
             });
     }, []);
-    console.log(payments);
+    // console.log(payments);
     return (
         <div>
             <h3 className="text-center text-3xl font-bold">All Payments!</h3>

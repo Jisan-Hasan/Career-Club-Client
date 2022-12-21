@@ -3,7 +3,12 @@ import React, { useContext, useState } from "react";
 import { toast } from "react-hot-toast";
 import { FaFacebook, FaGithub, FaGoogle } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { saveUser, setUserRole, setUserVerifyStatus } from "../../api/auth";
+import {
+    saveUser,
+    setImageUrl,
+    setUserRole,
+    setUserVerifyStatus,
+} from "../../api/auth";
 import { AuthContext } from "../../contexts/AuthProvider";
 
 const Login = () => {
@@ -45,6 +50,9 @@ const Login = () => {
                 setUserRole(user?.email, "job-seeker");
                 // show success
                 toast.success("Signin Successfully.");
+
+                // save user image
+                setImageUrl(user?.email, user?.photoURL);
                 navigate(from);
             })
             .catch((err) => {

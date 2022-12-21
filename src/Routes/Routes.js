@@ -22,6 +22,8 @@ import AdminLayout from "../layout/AdminLayout";
 import EmployerLayout from "../layout/EmployerLayout";
 import Main from "../layout/Main";
 import PrivateRoute from "./PrivateRoute";
+import UserProfile from "../Pages/UserProfile/UserProfile";
+import UpdateProfile from "../Pages/UserProfile/UpdateProfile";
 
 const router = createBrowserRouter([
     {
@@ -48,7 +50,14 @@ const router = createBrowserRouter([
             {
                 path: "/jobs",
                 element: <Jobs />,
-                
+            },
+            {
+                path: "/profile",
+                element: <UserProfile />,
+            },
+            {
+                path: "/updateProfile",
+                element: <UpdateProfile />,
             },
         ],
     },

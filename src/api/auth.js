@@ -44,6 +44,25 @@ export const setUserRole = async (email, role) => {
         });
 };
 
+// save user image
+export const setImageUrl = async (email, img) => {
+    const imgObj = {
+        image: img,
+    };
+
+    fetch(`${process.env.REACT_APP_API_URL}/image/${email}`, {
+        method: "PATCH",
+        headers: {
+            "content-type": "application/json",
+        },
+        body: JSON.stringify(imgObj),
+    })
+        .then((res) => res.json())
+        .then((data) => {
+            return data.status;
+        });
+};
+
 // set user verify status
 export const setUserVerifyStatus = async (email, isVerified) => {
     const verifyObj = {

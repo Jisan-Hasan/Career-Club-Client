@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import { toast } from "react-hot-toast";
 import { FaFacebook, FaGithub, FaGoogle } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import { saveUser, setUserRole } from "../../api/auth";
+import { saveUser, setImageUrl, setUserRole } from "../../api/auth";
 import { AuthContext } from "../../contexts/AuthProvider";
 
 const Signup = () => {
@@ -59,6 +59,9 @@ const Signup = () => {
             navigate("/");
             // setUserRole
             setUserRole(user?.email, role);
+
+            // save user image
+            setImageUrl(user?.email, img);
         });
     };
 
@@ -73,6 +76,9 @@ const Signup = () => {
                 setUserRole(user?.email, "job-seeker");
                 // show success
                 toast.success("Signin Successfully.");
+
+                // save user image
+                setImageUrl(user?.email, user?.photoURL);
                 navigate("/");
             })
             .catch((err) => {
