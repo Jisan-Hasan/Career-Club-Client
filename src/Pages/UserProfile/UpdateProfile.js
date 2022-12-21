@@ -62,7 +62,7 @@ const UpdateProfile = () => {
             .then((data) => {
                 if (data.status) {
                     navigate("/profile");
-                    toast.success("Job Updated Successfully.");
+                    toast.success("Profile Updated Successfully.");
                 }
             });
     };
@@ -143,7 +143,6 @@ const UpdateProfile = () => {
                         name="github"
                         placeholder="Github URL"
                         defaultValue={userProfile?.github}
-                        required
                     />
                 </div>
 
@@ -154,7 +153,6 @@ const UpdateProfile = () => {
                         name="portfolio"
                         placeholder="Portfolio URL"
                         defaultValue={userProfile?.portfolio}
-                        required
                     />
                 </div>
 
@@ -165,7 +163,6 @@ const UpdateProfile = () => {
                         name="linkedin"
                         placeholder="LinkedIn Profile"
                         defaultValue={userProfile?.linkedin}
-                        required
                     />
                 </div>
 
@@ -183,7 +180,7 @@ const UpdateProfile = () => {
                 </div>
 
                 <Button className="mt-6" type="submit">
-                    Update Job
+                    Update
                 </Button>
             </form>
         </div>
