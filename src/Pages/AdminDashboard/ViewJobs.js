@@ -210,7 +210,7 @@ const ViewJobs = () => {
                 </React.Fragment>
             )}
 
-            {/* delete modal */}
+            {/* approve modal */}
             {approveModal && (
                 <React.Fragment>
                     <Modal
