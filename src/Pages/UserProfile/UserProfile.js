@@ -5,13 +5,16 @@ import { FaHouseUser, FaUniversity } from "react-icons/fa";
 import { AiOutlineLink } from "react-icons/ai";
 import { setTitle } from "../../api/title";
 import { Link } from "react-router-dom";
-import { Card } from "flowbite-react";
+import { Button, Card, Modal, TextInput } from "flowbite-react";
 import { GrAdd } from "react-icons/gr";
+import { toast } from "react-hot-toast";
 
 const UserProfile = () => {
     setTitle("My Profile");
     const { user } = useContext(AuthContext);
     const [userProfile, setUserProfile] = useState(null);
+    const [addModal, setAddModal] = useState(false);
+    const [refresh, setRefresh] = useState(false);
     // get userinfo from db
     useEffect(() => {
         fetch(`${process.env.REACT_APP_API_URL}/user/${user?.email}`)
@@ -21,7 +24,35 @@ const UserProfile = () => {
                     setUserProfile(data.data);
                 }
             });
-    }, [user]);
+    }, [user, refresh]);
+
+    // handle add skills
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setAddModal(false);
+
+        let skills = userProfile?.skills;
+        if (!skills) {
+            skills = [e.target.title.value];
+        } else {
+            skills = [...skills, e.target.title.value];
+        }
+
+        fetch(`${process.env.REACT_APP_API_URL}/addSkill/${userProfile?._id}`, {
+            method: "PATCH",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ skills: skills }),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.status) {
+                    setRefresh(!refresh);
+                    toast.success("New Skill Added");
+                }
+            });
+        // const skills = userProfile?.skills;
+        console.log(skills);
+    };
     return (
         <div className="mt-10 grid justify-center">
             <div className="md:flex md:space-x-5 md:items-center">
@@ -79,12 +110,62 @@ const UserProfile = () => {
             {/* Skills set */}
             <Card className="mt-5">
                 <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white flex justify-between items-center">
-                    Skills <GrAdd />
+                    Skills <GrAdd onClick={() => setAddModal(true)} />
                 </h5>
-                <p className="font-normal text-gray-700 dark:text-gray-400">
-                    {userProfile?.bio}
-                </p>
+                <div className="mt-2 space-x-2">
+                    {!userProfile?.skills
+                        ? "No Skills Found"
+                        : userProfile?.skills.map((skill,i) => (
+                              <span key={i} className="font-normal text-gray-700 dark:text-gray-400 bg-red-400 px-4 py-2 rounded-2xl">
+                                  {skill}
+                              </span>
+                          ))}
+                </div>
             </Card>
+
+            {/* update modal */}
+            {addModal && (
+                <React.Fragment>
+                    <Modal
+                        show={addModal}
+                        size="md"
+                        popup={true}
+                        onClose={() => setAddModal(false)}
+                    >
+                        <Modal.Header />
+                        <Modal.Body>
+                            <div className="space-y-6 px-6 pb-4 sm:pb-6 lg:px-8 xl:pb-8">
+                                <form
+                                    onSubmit={handleSubmit}
+                                    className="space-y-6"
+                                >
+                                    <h3 className="text-center text-xl font-medium text-gray-900 dark:text-white">
+                                        Add New Skill
+                                    </h3>
+                                    {/* title */}
+                                    <div>
+                                        <TextInput
+                                            type="text"
+                                            name="title"
+                                            placeholder="HTML, CSS, JavaScript"
+                                            required={true}
+                                        />
+                                    </div>
+
+                                    <div className="w-full">
+                                        <Button
+                                            type="submit"
+                                            className="w-full"
+                                        >
+                                            Add
+                                        </Button>
+                                    </div>
+                                </form>
+                            </div>
+                        </Modal.Body>
+                    </Modal>
+                </React.Fragment>
+            )}
         </div>
     );
 };
