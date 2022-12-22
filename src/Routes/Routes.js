@@ -24,6 +24,7 @@ import Main from "../layout/Main";
 import PrivateRoute from "./PrivateRoute";
 import UserProfile from "../Pages/UserProfile/UserProfile";
 import UpdateProfile from "../Pages/UserProfile/UpdateProfile";
+import JobDetails from "../Pages/JobDetails/JobDetails";
 
 const router = createBrowserRouter([
     {
@@ -50,6 +51,12 @@ const router = createBrowserRouter([
             {
                 path: "/jobs",
                 element: <Jobs />,
+            },
+            {
+                path: "/jobs/:id",
+                element: <JobDetails />,
+                loader: ({ params }) =>
+                    fetch(`${process.env.REACT_APP_API_URL}/job/${params.id}`),
             },
             {
                 path: "/profile",

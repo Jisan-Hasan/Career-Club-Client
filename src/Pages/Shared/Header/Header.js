@@ -22,7 +22,6 @@ const Header = () => {
             });
     }, [user]);
 
-
     const handleLogout = () => {
         logout()
             .then(() => {})
@@ -92,10 +91,16 @@ const Header = () => {
                             </Dropdown.Header>
                             {role === "job-seeker" && (
                                 <div className="space-y-2">
-                                    <Link to='/profile' className="flex gap-2 pl-4 items-center">
+                                    <Link
+                                        to="/profile"
+                                        className="flex gap-2 pl-4 items-center"
+                                    >
                                         <BsPersonCircle /> My Profile
                                     </Link>
-                                    <Link to='/updateProfile' className="flex gap-2 pl-4 items-center">
+                                    <Link
+                                        to="/updateProfile"
+                                        className="flex gap-2 pl-4 items-center"
+                                    >
                                         <BsPersonPlusFill /> Update Profile
                                     </Link>
                                     <Link className="flex gap-2 pl-4 items-center">
@@ -133,9 +138,11 @@ const Header = () => {
                     <Link to="/blogs" className="hover:text-blue-600">
                         Blogs
                     </Link>
-                    <Link to={`${path}`} className="hover:text-blue-600">
-                        Dashboard
-                    </Link>
+                    {role !== "job-seeker" && (
+                        <Link to={`${path}`} className="hover:text-blue-600">
+                            Dashboard
+                        </Link>
+                    )}
                 </Navbar.Collapse>
             </Navbar>
         </>

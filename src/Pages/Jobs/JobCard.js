@@ -5,10 +5,12 @@ import { FcApproval, FcDisapprove } from 'react-icons/fc';
 import { GoLocation } from 'react-icons/go';
 import { GrUserExpert } from 'react-icons/gr';
 import { MdWork } from 'react-icons/md';
+import { useNavigate } from 'react-router-dom';
 
 const JobCard = ({job}) => {
+    const navigate = useNavigate();
     return (
-        <Card key={job._id} className='cursor-pointer'>
+        <Card onClick={()=>navigate(`/jobs/${job?._id}`)} key={job._id} className='cursor-pointer'>
                         <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white flex items-center justify-between">
                             <span>{job.title}</span>
                             <span>
