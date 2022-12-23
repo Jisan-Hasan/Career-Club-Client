@@ -7,24 +7,26 @@ import ViewCategories from "../Pages/AdminDashboard/ViewCategories";
 import ViewJobs from "../Pages/AdminDashboard/ViewJobs";
 import ViewPackage from "../Pages/AdminDashboard/ViewPackage";
 import Blogs from "../Pages/Blogs/Blogs";
+import ApplicantProfile from "../Pages/EmployerDashboard/ApplicantProfile";
 import BuyPackage from "../Pages/EmployerDashboard/BuyPackage";
 import EmployerDashboard from "../Pages/EmployerDashboard/EmployerDashboard";
+import JobApplication from "../Pages/EmployerDashboard/JobApplication";
 import ModifyPost from "../Pages/EmployerDashboard/ModifyPost";
 import MyPackage from "../Pages/EmployerDashboard/MyPackage";
 import MyPosts from "../Pages/EmployerDashboard/MyPosts";
 import Payment from "../Pages/EmployerDashboard/Payment";
 import PostJob from "../Pages/EmployerDashboard/PostJob";
 import Home from "../Pages/Home/Home";
+import JobDetails from "../Pages/JobDetails/JobDetails";
 import Jobs from "../Pages/Jobs/Jobs";
 import Login from "../Pages/Login/Login";
 import Signup from "../Pages/Login/Signup";
+import UpdateProfile from "../Pages/UserProfile/UpdateProfile";
+import UserProfile from "../Pages/UserProfile/UserProfile";
 import AdminLayout from "../layout/AdminLayout";
 import EmployerLayout from "../layout/EmployerLayout";
 import Main from "../layout/Main";
 import PrivateRoute from "./PrivateRoute";
-import UserProfile from "../Pages/UserProfile/UserProfile";
-import UpdateProfile from "../Pages/UserProfile/UpdateProfile";
-import JobDetails from "../Pages/JobDetails/JobDetails";
 
 const router = createBrowserRouter([
     {
@@ -66,6 +68,7 @@ const router = createBrowserRouter([
                 path: "/updateProfile",
                 element: <UpdateProfile />,
             },
+            
         ],
     },
     {
@@ -147,6 +150,16 @@ const router = createBrowserRouter([
                 element: <ModifyPost />,
                 loader: ({ params }) =>
                     fetch(`${process.env.REACT_APP_API_URL}/job/${params.id}`),
+            },
+            {
+                path: "/employerDashboard/application/:id",
+                element: <JobApplication />,
+            },
+            {
+                path: "/employerDashboard/applicantProfile/:email",
+                element: <ApplicantProfile />,
+                loader: ({ params }) =>
+                    fetch(`${process.env.REACT_APP_API_URL}/user/${params.email}`),
             },
         ],
     },

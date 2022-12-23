@@ -9,6 +9,7 @@ import { MdWork } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { setTitle } from "../../api/title";
 import { AuthContext } from "../../contexts/AuthProvider";
+import { FaUser } from "react-icons/fa";
 
 const MyPosts = () => {
     setTitle("My Posts");
@@ -40,6 +41,7 @@ const MyPosts = () => {
                 }
             });
     };
+
     return (
         <div>
             <h3 className="text-2xl font-bold text-center">My Posts</h3>
@@ -84,7 +86,13 @@ const MyPosts = () => {
                                 /month
                             </p>
                         </div>
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="grid grid-cols-3 gap-2">
+                            <Link
+                                to={`/employerDashboard/application/${job?._id}`}
+                                className={`btn w-full btn-primary ${job?.isApproved ? '' : 'btn-disabled'}`}
+                            >
+                                Application
+                            </Link>
                             <Link
                                 to={`/employerDashboard/modifyPost/${job._id}`}
                                 className="btn w-full btn-outline"
