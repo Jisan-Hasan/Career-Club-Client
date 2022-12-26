@@ -1,12 +1,14 @@
-import { Card } from 'flowbite-react';
-import React from 'react';
-import { AiOutlineLink } from 'react-icons/ai';
-import { FaHouseUser, FaUniversity } from 'react-icons/fa';
-import { MdEmail, MdPhone } from 'react-icons/md';
-import { Link, useLoaderData } from 'react-router-dom';
+import { Card } from "flowbite-react";
+import React from "react";
+import { AiOutlineLink } from "react-icons/ai";
+import { FaHouseUser, FaUniversity } from "react-icons/fa";
+import { MdEmail, MdPhone } from "react-icons/md";
+import { Link, useLoaderData } from "react-router-dom";
+import { setTitle } from "../../api/title";
 
 const ApplicantProfile = () => {
     const profile = useLoaderData().data;
+    setTitle(profile?.name);
     return (
         <div className="mt-10 grid justify-center">
             <div className="md:flex md:space-x-5 md:items-center">
@@ -37,17 +39,27 @@ const ApplicantProfile = () => {
                     </p>
                     <p className="flex items-center gap-3 text-lg">
                         <AiOutlineLink />{" "}
-                        <Link target="_blank" to={profile?.github}>
-                            GitHub
-                        </Link>{" "}
-                        ||{" "}
-                        <Link target="_blank" to={profile?.portfolio}>
-                            Portfolio
-                        </Link>{" "}
-                        ||{" "}
-                        <Link target="_blank" to={profile?.linkedin}>
-                            LinkedIn
-                        </Link>
+                        {profile?.github && profile?.github !== "" && (
+                            <>
+                                <a target="_blank" href={profile?.github}>
+                                    GitHub
+                                </a>{" "}
+                                ||{" "}
+                            </>
+                        )}
+                        {profile?.portfolio && profile?.portfolio !== "" && (
+                            <>
+                                <a target="_blank" href={profile?.portfolio}>
+                                    Portfolio
+                                </a>{" "}
+                                ||{" "}
+                            </>
+                        )}
+                        {profile?.linkedin && profile?.linkedin !== "" && (
+                            <a target="_blank" href={profile?.linkedin}>
+                                LinkedIn
+                            </a>
+                        )}
                     </p>
                 </div>
             </div>
@@ -69,15 +81,20 @@ const ApplicantProfile = () => {
                 <div className="mt-2 space-x-2">
                     {!profile?.skills
                         ? "No Skills Found"
-                        : profile?.skills.map((skill,i) => (
-                              <span key={i} className="font-normal text-gray-700 dark:text-gray-400 bg-red-400 px-4 py-2 rounded-2xl">
+                        : profile?.skills.map((skill, i) => (
+                              <span
+                                  key={i}
+                                  className="font-normal text-gray-700 dark:text-gray-400 bg-red-400 px-4 py-2 rounded-2xl"
+                              >
                                   {skill}
                               </span>
                           ))}
                 </div>
             </Card>
 
-            
+            <div className="mt-8 text-center">
+                <button className="btn btn-primary">Schedule A Meeting</button>
+            </div>
         </div>
     );
 };

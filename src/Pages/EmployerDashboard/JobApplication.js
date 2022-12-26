@@ -1,22 +1,47 @@
 import { Card, Table, TextInput } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { setTitle } from "../../api/title";
 
 const JobApplication = () => {
+    setTitle("Applications");
     const [applications, setApplications] = useState([]);
-    const [refresh, setRefresh] = useState(false);
     const location = useLocation();
+
+    const [university, setUniversity] = useState("");
+    const [minCGPA, setMinCGPA] = useState(0);
+    const [maxCGPA, setMaxCGPA] = useState(4);
+
+    console.log(university, minCGPA, maxCGPA);
+
     // console.log(location.pathname);
     const applicationId = location.pathname.split("/")[3];
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/application/${applicationId}`)
+        fetch(
+            `${process.env.REACT_APP_API_URL}/application/${applicationId}?uni=${university}`
+        )
             .then((res) => res.json())
             .then((data) => {
                 if (data.status) {
                     setApplications(data.data);
                 }
             });
-    }, [refresh, applicationId]);
+    }, [applicationId, university, minCGPA, maxCGPA]);
+
+    if (minCGPA === "") {
+        setMinCGPA(0);
+    }
+    if (maxCGPA === "") {
+        setMaxCGPA(4);
+    }
+    let filteredResult = applications.filter((application) => {
+        if (
+            Number(application.cgpa) >= minCGPA &&
+            Number(application.cgpa) <= maxCGPA
+        ) {
+            return application;
+        }
+    });
     // console.log(applications);
     return (
         <div className="lg:flex lg:flex-row-reverse gap-3">
@@ -32,6 +57,7 @@ const JobApplication = () => {
                                 name="university"
                                 type="text"
                                 placeholder="United International University"
+                                onChange={(e) => setUniversity(e.target.value)}
                             ></TextInput>
                         </Card>
                     </li>
@@ -47,11 +73,13 @@ const JobApplication = () => {
                                     name="min"
                                     type="number"
                                     placeholder="Min. CGPA"
+                                    onChange={(e) => setMinCGPA(e.target.value)}
                                 ></TextInput>
                                 <TextInput
                                     name="max"
                                     type="number"
                                     placeholder="Max. CGPA"
+                                    onChange={(e) => setMaxCGPA(e.target.value)}
                                 ></TextInput>
                             </div>
                         </Card>
@@ -63,11 +91,13 @@ const JobApplication = () => {
                     <Table hoverable={true}>
                         <Table.Head className="text-base text-[#05A3B7]">
                             <Table.HeadCell>Serial</Table.HeadCell>
+                            <Table.HeadCell>Name</Table.HeadCell>
                             <Table.HeadCell>Email</Table.HeadCell>
+                            <Table.HeadCell>CGPA</Table.HeadCell>
                             <Table.HeadCell>Action</Table.HeadCell>
                         </Table.Head>
                         <Table.Body className="divide-y">
-                            {applications.map((application, i) => (
+                            {filteredResult.map((application, i) => (
                                 <Table.Row
                                     key={application._id}
                                     className="bg-white dark:border-gray-700 dark:bg-gray-800"
@@ -76,7 +106,13 @@ const JobApplication = () => {
                                         {i + 1}
                                     </Table.Cell>
                                     <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                        {application?.name}
+                                    </Table.Cell>
+                                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                                         {application?.seeker_email}
+                                    </Table.Cell>
+                                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                        {application?.cgpa}
                                     </Table.Cell>
                                     <Table.Cell>
                                         <Link

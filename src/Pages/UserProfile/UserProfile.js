@@ -10,7 +10,7 @@ import { GrAdd } from "react-icons/gr";
 import { toast } from "react-hot-toast";
 
 const UserProfile = () => {
-    setTitle("My Profile");
+    setTitle("My userProfile");
     const { user } = useContext(AuthContext);
     const [userProfile, setUserProfile] = useState(null);
     const [addModal, setAddModal] = useState(false);
@@ -83,17 +83,27 @@ const UserProfile = () => {
                     </p>
                     <p className="flex items-center gap-3 text-lg">
                         <AiOutlineLink />{" "}
-                        <Link target="_blank" to={userProfile?.github}>
-                            GitHub
-                        </Link>{" "}
-                        ||{" "}
-                        <Link target="_blank" to={userProfile?.portfolio}>
-                            Portfolio
-                        </Link>{" "}
-                        ||{" "}
-                        <Link target="_blank" to={userProfile?.linkedin}>
-                            LinkedIn
-                        </Link>
+                        {userProfile?.github && userProfile?.github !== "" && (
+                            <>
+                                <a target="_blank" href={userProfile?.github}>
+                                    GitHub
+                                </a>{" "}
+                                ||{" "}
+                            </>
+                        )}
+                        {userProfile?.portfolio && userProfile?.portfolio !== "" && (
+                            <>
+                                <a target="_blank" href={userProfile?.portfolio}>
+                                    Portfolio
+                                </a>{" "}
+                                ||{" "}
+                            </>
+                        )}
+                        {userProfile?.linkedin && userProfile?.linkedin !== "" && (
+                            <a target="_blank" to={userProfile?.linkedin}>
+                                LinkedIn
+                            </a>
+                        )}
                     </p>
                 </div>
             </div>

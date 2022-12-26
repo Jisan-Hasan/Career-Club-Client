@@ -21,8 +21,32 @@ const JobDetails = () => {
     setTitle(job?.title);
     const [applyModal, setApplyModal] = useState(false);
     const [isApplied, setIsApplied] = useState(false);
+    const [role, setRole] = useState("");
     const [refresh, setRefresh] = useState(false);
-    // console.log(job);
+
+    const [userInfo, setUserInfo] = useState(null);
+
+    useEffect(() => {
+        fetch(`${process.env.REACT_APP_API_URL}/user/${user?.email}`)
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.status) {
+                    setUserInfo(data.data);
+                }
+            });
+    }, [user]);
+    console.log(userInfo);
+
+    // get user role
+    useEffect(() => {
+        fetch(`${process.env.REACT_APP_API_URL}/userRole/${user?.email}`)
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.status) {
+                    setRole(data.data);
+                }
+            });
+    }, [user]);
 
     // check is already applied or not
     useEffect(() => {
@@ -35,7 +59,7 @@ const JobDetails = () => {
                     setIsApplied(true);
                 }
             });
-    }, [refresh,user, job]);
+    }, [refresh, user, job]);
 
     // handle job apply
     const handleApply = (isConfirm) => {
@@ -46,6 +70,9 @@ const JobDetails = () => {
             const application = {
                 seeker_email: user?.email,
                 job_id: job?._id,
+                university: userInfo?.institute,
+                cgpa: userInfo?.cgpa,
+                name: userInfo?.name,
             };
             fetch(`${process.env.REACT_APP_API_URL}/application`, {
                 method: "POST",
@@ -111,7 +138,9 @@ const JobDetails = () => {
                 ) : (
                     <button
                         onClick={() => setApplyModal(true)}
-                        className="btn btn-outline duration-300"
+                        className={`btn btn-outline duration-300 ${
+                            role !== "job-seeker" && "btn-disabled"
+                        }`}
                     >
                         Apply
                     </button>

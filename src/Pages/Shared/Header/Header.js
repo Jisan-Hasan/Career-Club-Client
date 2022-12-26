@@ -138,7 +138,7 @@ const Header = () => {
                     <Link to="/blogs" className="hover:text-blue-600">
                         Blogs
                     </Link>
-                    {role !== "job-seeker" && (
+                    {user && role !== "job-seeker" && (
                         <Link to={`${path}`} className="hover:text-blue-600">
                             Dashboard
                         </Link>
