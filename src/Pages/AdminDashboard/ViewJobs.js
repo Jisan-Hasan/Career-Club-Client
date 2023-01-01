@@ -8,8 +8,10 @@ import { GoLocation } from "react-icons/go";
 import { GrUserExpert } from "react-icons/gr";
 import { MdWork } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { setTitle } from "../../api/title";
 
 const ViewJobs = () => {
+    setTitle("All Jobs");
     const [type, setType] = useState("all");
     const [jobs, setJobs] = useState([]);
     const [selectedJob, setSelectedJob] = useState("");

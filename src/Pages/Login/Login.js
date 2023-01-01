@@ -1,19 +1,17 @@
-import { Button, Label, TextInput } from "flowbite-react";
+import { Label, TextInput } from "flowbite-react";
 import React, { useContext, useState } from "react";
 import { toast } from "react-hot-toast";
 import { FaFacebook, FaGithub, FaGoogle } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import {
-    saveUser,
-    setImageUrl,
-    setUserRole,
-    setUserVerifyStatus,
-} from "../../api/auth";
+import PrimaryButton from "../../Components/Button/PrimaryButton";
+import { saveUser, setImageUrl, setUserRole } from "../../api/auth";
 import { AuthContext } from "../../contexts/AuthProvider";
+import SmallSpinner from "../../Components/Spinner/SmallSpinner";
 
 const Login = () => {
     const [email, setEmail] = useState("");
-    const { signInWithGoogle, signIn } = useContext(AuthContext);
+    const { signInWithGoogle, signIn, loading, setLoading } =
+        useContext(AuthContext);
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -35,6 +33,7 @@ const Login = () => {
             })
             .catch((err) => {
                 toast.error(`${err.message}`);
+                setLoading(false);
             });
     };
 
@@ -94,9 +93,12 @@ const Login = () => {
                     </div>
                 </div>
 
-                <Button className="mt-3" type="submit">
-                    Login
-                </Button>
+                <PrimaryButton
+                    type="submit"
+                    classes="w-full px-8 py-3 font-semibold rounded-md bg-gray-900 hover:bg-gray-700 hover:text-white text-gray-100"
+                >
+                    {loading ? <SmallSpinner /> : "Log in"}
+                </PrimaryButton>
 
                 <div className="mt-2 mb-3">
                     <div className="mb-2 text-sm block">

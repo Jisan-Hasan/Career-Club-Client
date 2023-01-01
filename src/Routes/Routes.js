@@ -9,7 +9,6 @@ import ViewPackage from "../Pages/AdminDashboard/ViewPackage";
 import Blogs from "../Pages/Blogs/Blogs";
 import ApplicantProfile from "../Pages/EmployerDashboard/ApplicantProfile";
 import BuyPackage from "../Pages/EmployerDashboard/BuyPackage";
-import EmployerDashboard from "../Pages/EmployerDashboard/EmployerDashboard";
 import JobApplication from "../Pages/EmployerDashboard/JobApplication";
 import ModifyPost from "../Pages/EmployerDashboard/ModifyPost";
 import MyPackage from "../Pages/EmployerDashboard/MyPackage";
@@ -119,7 +118,7 @@ const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <EmployerDashboard />,
+                element: <MyPackage />,
             },
             {
                 path: "/employerDashboard/buyPackage",
@@ -163,14 +162,7 @@ const router = createBrowserRouter([
             },
         ],
     },
-    {
-        path: "/userDashboard",
-        element: (
-            <PrivateRoute>
-                <p>User Dashboard</p>
-            </PrivateRoute>
-        ),
-    },
+    
 ]);
 
 export default router;

@@ -1,7 +1,9 @@
 import { Table } from "flowbite-react";
 import React, { useEffect, useState } from "react";
+import { setTitle } from "../../api/title";
 
 const AllPayment = () => {
+    setTitle("All Payments");
     const [payments, setPayments] = useState([]);
     useEffect(() => {
         fetch(`${process.env.REACT_APP_API_URL}/payments`)

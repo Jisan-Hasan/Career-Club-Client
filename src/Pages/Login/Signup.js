@@ -5,10 +5,17 @@ import { FaFacebook, FaGithub, FaGoogle } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { saveUser, setImageUrl, setUserRole } from "../../api/auth";
 import { AuthContext } from "../../contexts/AuthProvider";
+import PrimaryButton from "../../Components/Button/PrimaryButton";
+import SmallSpinner from "../../Components/Spinner/SmallSpinner";
 
 const Signup = () => {
-    const { createUser, signInWithGoogle, updateUserProfile } =
-        useContext(AuthContext);
+    const {
+        createUser,
+        signInWithGoogle,
+        updateUserProfile,
+        loading,
+        setLoading,
+    } = useContext(AuthContext);
 
     const navigate = useNavigate();
     // handle signup
@@ -39,30 +46,40 @@ const Signup = () => {
                 if (data.success) {
                     const img_url = data.data.display_url;
                     // create user with email & password
-                    createUser(email, password).then((result) => {
-                        const user = result.user;
-                        // console.log(user);
+                    createUser(email, password)
+                        .then((result) => {
+                            const user = result.user;
+                            // console.log(user);
 
-                        // update user info
-                        updateUser(user, name, img_url, role);
-                    });
+                            // update user info
+                            updateUser(user, name, img_url, role);
+                        })
+                        .catch((err) => {
+                            toast.error(err.message);
+                            setLoading(false);
+                        });
                 }
             });
     };
 
     const updateUser = async (user, name, img, role) => {
-        updateUserProfile(name, img).then(() => {
-            // save user in db
-            saveUser(user);
-            // show success toast
-            toast.success("Account Registered Successfully.");
-            navigate("/");
-            // setUserRole
-            setUserRole(user?.email, role);
+        updateUserProfile(name, img)
+            .then(() => {
+                // save user in db
+                saveUser(user);
+                // show success toast
+                toast.success("Account Registered Successfully.");
+                navigate("/");
+                // setUserRole
+                setUserRole(user?.email, role);
 
-            // save user image
-            setImageUrl(user?.email, img);
-        });
+                // save user image
+                setImageUrl(user?.email, img);
+            })
+            .catch((err) => {
+                toast.error(err.message);
+                setLoading(false);
+            });
     };
 
     const handleGoogleSignIn = () => {
@@ -161,9 +178,12 @@ const Signup = () => {
                 </fieldset>
 
                 {/* Signup button */}
-                <Button className="mt-4" type="submit">
-                    Sign Up
-                </Button>
+                <PrimaryButton
+                    type="submit"
+                    classes="w-full px-8 py-3 font-semibold rounded-md bg-gray-900 hover:bg-gray-700 hover:text-white text-gray-100"
+                >
+                    {loading ? <SmallSpinner /> : "Sign Up"}
+                </PrimaryButton>
 
                 <div className="mt-2 mb-3">
                     <div className="mb-2 text-sm block">

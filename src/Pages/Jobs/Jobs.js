@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { setTitle } from "../../api/title";
 import JobCard from "./JobCard";
+import Spinner from "../../Components/Spinner/Spinner";
 
 const Jobs = () => {
     setTitle("Jobs");
@@ -12,6 +13,7 @@ const Jobs = () => {
     const [type, setType] = useState("all");
     const [duration, setDuration] = useState("all");
     const [searchStr, setSearchStr] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const [jobs, setJobs] = useState([]);
 
@@ -29,6 +31,7 @@ const Jobs = () => {
 
     // get jobs
     useEffect(() => {
+        setLoading(true);
         fetch(
             `${process.env.REACT_APP_API_URL}/jobs/?category=${category}&experience=${experience}&type=${type}&duration=${duration}&searchStr=${searchStr}`
         )
@@ -36,6 +39,7 @@ const Jobs = () => {
             .then((data) => {
                 if (data.status) {
                     setJobs(data.data);
+                    setLoading(false);
                 }
             });
     }, [category, experience, type, duration, searchStr]);
@@ -122,11 +126,19 @@ const Jobs = () => {
                     </div>
 
                     {/* All Jobs Shown here */}
-                    <div className='mt-5 grid md:grid-cols-2 lg:grid-cols-3 gap-3'>
-                        {jobs.map((job) => (
-                            <JobCard key={job._id} job={job} />
-                        ))}
-                    </div>
+                    {loading ? (
+                        <Spinner />
+                    ) : jobs.length ? (
+                        <div className="mt-5 grid md:grid-cols-2 lg:grid-cols-3 gap-3">
+                            {jobs.map((job) => (
+                                <JobCard key={job._id} job={job} />
+                            ))}
+                        </div>
+                    ) : (
+                        <p className="text-center mt-16 text-2xl text-red-600 font-bold">
+                            No Job Found
+                        </p>
+                    )}
                 </div>
                 <div className="drawer-side scroll-smooth">
                     <label

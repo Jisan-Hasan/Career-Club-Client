@@ -24,15 +24,12 @@ const EmployerLayout = () => {
                     <ul className="menu p-4 w-80 bg-base-100 text-base-content">
                         {/* <!-- Sidebar content here --> */}
                         <li>
-                            <Link to='/employerDashboard'>Dashboard</Link>
+                            <Link to='/employerDashboard/myPackage'>My Package</Link>
                         </li>
-                        <li></li>
                         <li>
                             <Link to='/employerDashboard/buyPackage'>Buy Package</Link>
                         </li>
-                        <li>
-                            <Link to='/employerDashboard/myPackage'>My Package</Link>
-                        </li>
+                        
                         <li></li>
                         <li>
                             <Link to='/employerDashboard/postJob'>Post A Job</Link>
