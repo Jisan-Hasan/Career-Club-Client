@@ -1,14 +1,46 @@
-import { Card } from "flowbite-react";
-import React from "react";
+import emailjs from "@emailjs/browser";
+import {
+    Button,
+    Card,
+    Label,
+    Modal,
+    TextInput,
+    Textarea,
+} from "flowbite-react";
+import React, { useContext, useState } from "react";
+import { toast } from "react-hot-toast";
 import { AiOutlineLink } from "react-icons/ai";
 import { FaHouseUser, FaUniversity } from "react-icons/fa";
 import { MdEmail, MdPhone } from "react-icons/md";
-import { Link, useLoaderData } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import { setTitle } from "../../api/title";
+import { AuthContext } from "../../contexts/AuthProvider";
 
 const ApplicantProfile = () => {
     const profile = useLoaderData().data;
+    const { user } = useContext(AuthContext);
+    const [emailModal, setEmailModal] = useState(false);
     setTitle(profile?.name);
+
+    const handleEmailSubmit = (e) => {
+        e.preventDefault();
+        setEmailModal(false);
+
+        emailjs
+            .sendForm(
+                "service_49tpm03",
+                "template_51r7c2w",
+                e.target,
+                "xjPqQtgtWWPID2g_p"
+            )
+            .then((res) => {
+                toast.success("Email Send Successfully!");
+            })
+            .catch((err) => {
+                console.log(err);
+                toast.error(err.message);
+            });
+    };
     return (
         <div className="mt-10 grid justify-center">
             <div className="md:flex md:space-x-5 md:items-center">
@@ -41,7 +73,11 @@ const ApplicantProfile = () => {
                         <AiOutlineLink />{" "}
                         {profile?.github && profile?.github !== "" && (
                             <>
-                                <a target="_blank" href={profile?.github}>
+                                <a
+                                    target="_blank"
+                                    href={profile?.github}
+                                    rel="noreferrer"
+                                >
                                     GitHub
                                 </a>{" "}
                                 ||{" "}
@@ -49,14 +85,22 @@ const ApplicantProfile = () => {
                         )}
                         {profile?.portfolio && profile?.portfolio !== "" && (
                             <>
-                                <a target="_blank" href={profile?.portfolio}>
+                                <a
+                                    target="_blank"
+                                    href={profile?.portfolio}
+                                    rel="noreferrer"
+                                >
                                     Portfolio
                                 </a>{" "}
                                 ||{" "}
                             </>
                         )}
                         {profile?.linkedin && profile?.linkedin !== "" && (
-                            <a target="_blank" href={profile?.linkedin}>
+                            <a
+                                target="_blank"
+                                href={profile?.linkedin}
+                                rel="noreferrer"
+                            >
                                 LinkedIn
                             </a>
                         )}
@@ -93,8 +137,111 @@ const ApplicantProfile = () => {
             </Card>
 
             <div className="mt-8 text-center">
-                <button className="btn btn-primary">Schedule A Meeting</button>
+                <button
+                    onClick={() => setEmailModal(true)}
+                    className="btn btn-primary"
+                >
+                    Send Email
+                </button>
             </div>
+
+            {/* email modal */}
+            {emailModal && (
+                <React.Fragment>
+                    <Modal
+                        show={emailModal}
+                        size="xl"
+                        popup={true}
+                        onClose={() => setEmailModal(false)}
+                    >
+                        <Modal.Header />
+                        <Modal.Body>
+                            <div className="space-y-6 px-6 pb-4 sm:pb-6 lg:px-8 xl:pb-8">
+                                <form
+                                    onSubmit={handleEmailSubmit}
+                                    className="space-y-2"
+                                    id="contact-form"
+                                >
+                                    <h3 className="text-center text-xl font-medium text-gray-900 dark:text-white">
+                                        Contact Form
+                                    </h3>
+                                    {/* From */}
+                                    <div>
+                                        <div className=" block">
+                                            <Label
+                                                htmlFor="from"
+                                                value="From"
+                                            />
+                                        </div>
+                                        <TextInput
+                                            type="email"
+                                            id="from"
+                                            name="from"
+                                            value={user?.email}
+                                            readOnly
+                                        />
+                                    </div>
+                                    {/* To */}
+                                    <div>
+                                        <div className=" block">
+                                            <Label
+                                                htmlFor="recipient"
+                                                value="To"
+                                            />
+                                        </div>
+                                        <TextInput
+                                            type="text"
+                                            id="recipient"
+                                            name="recipient"
+                                            value={profile?.email}
+                                            readOnly
+                                        />
+                                    </div>
+                                    {/* Subject */}
+                                    <div>
+                                        <div className=" block">
+                                            <Label
+                                                htmlFor="subject"
+                                                value="Subject"
+                                            />
+                                        </div>
+                                        <TextInput
+                                            type="text"
+                                            id="subject"
+                                            name="subject"
+                                            placeholder="Email Subject..."
+                                        />
+                                    </div>
+                                    {/* Message */}
+                                    <div>
+                                        <div className=" block">
+                                            <Label
+                                                htmlFor="message"
+                                                value="Message"
+                                            />
+                                        </div>
+                                        <Textarea
+                                            rows={4}
+                                            id="message"
+                                            name="message"
+                                            placeholder="Write your message..."
+                                        />
+                                    </div>
+
+                                    <div className="w-full">
+                                        <Button
+                                            type="submit"
+                                            className="w-full"
+                                        >
+                                            Send Email
+                                        </Button>
+                                    </div>
+                                </form>
+                            </div>
+                        </Modal.Body>
+                    </Modal>
+                </React.Fragment>
+            )}
         </div>
     );
 };
