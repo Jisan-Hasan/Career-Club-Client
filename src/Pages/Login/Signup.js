@@ -17,7 +17,7 @@ const Signup = () => {
         updateUserProfile,
         loading,
         setLoading,
-        signInWithFacebook,
+        signInWithFacebook,signInWithGithub
     } = useContext(AuthContext);
 
     const navigate = useNavigate();
@@ -109,6 +109,28 @@ const Signup = () => {
     // implement facebook signin
     const handleFacebookSignIn = () => {
         signInWithFacebook()
+            .then((result) => {
+                const user = result.user;
+
+                // save user in db
+                saveUser(user);
+                // setUserRole
+                setUserRole(user?.email, "job-seeker");
+                // show success
+                toast.success("Signin Successfully.");
+
+                // save user image
+                setImageUrl(user?.email, user?.photoURL);
+                navigate("/");
+            })
+            .catch((err) => {
+                toast.error(`${err.message}`);
+                setLoading(false);
+            });
+    };
+    // implement github signin
+    const handleGithubSignIn = () => {
+        signInWithGithub()
             .then((result) => {
                 const user = result.user;
 
@@ -227,7 +249,7 @@ const Signup = () => {
                 <div className="flex justify-center gap-12 mt-4">
                     <FaGoogle onClick={handleGoogleSignIn} size={25} />
                     <FaFacebook onClick={handleFacebookSignIn} size={25} />
-                    <FaGithub size={25} />
+                    <FaGithub onClick={handleGithubSignIn} size={25} />
                 </div>
             </div>
         </div>

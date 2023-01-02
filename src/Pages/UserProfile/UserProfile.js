@@ -1,13 +1,12 @@
-import React, { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../contexts/AuthProvider";
-import { MdEmail, MdPhone } from "react-icons/md";
-import { FaHouseUser, FaUniversity } from "react-icons/fa";
-import { AiOutlineLink } from "react-icons/ai";
-import { setTitle } from "../../api/title";
-import { Link } from "react-router-dom";
 import { Button, Card, Modal, TextInput } from "flowbite-react";
-import { GrAdd } from "react-icons/gr";
+import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
+import { AiOutlineLink } from "react-icons/ai";
+import { FaHouseUser, FaUniversity } from "react-icons/fa";
+import { GrAdd } from "react-icons/gr";
+import { MdEmail, MdPhone } from "react-icons/md";
+import { setTitle } from "../../api/title";
+import { AuthContext } from "../../contexts/AuthProvider";
 
 const UserProfile = () => {
     setTitle("My userProfile");
@@ -85,7 +84,7 @@ const UserProfile = () => {
                         <AiOutlineLink />{" "}
                         {userProfile?.github && userProfile?.github !== "" && (
                             <>
-                                <a target="_blank" href={userProfile?.github}>
+                                <a target="_blank" href={userProfile?.github} rel="noreferrer">
                                     GitHub
                                 </a>{" "}
                                 ||{" "}
@@ -93,14 +92,14 @@ const UserProfile = () => {
                         )}
                         {userProfile?.portfolio && userProfile?.portfolio !== "" && (
                             <>
-                                <a target="_blank" href={userProfile?.portfolio}>
+                                <a target="_blank" href={userProfile?.portfolio} rel="noreferrer">
                                     Portfolio
                                 </a>{" "}
                                 ||{" "}
                             </>
                         )}
                         {userProfile?.linkedin && userProfile?.linkedin !== "" && (
-                            <a target="_blank" to={userProfile?.linkedin}>
+                            <a target="_blank" href={userProfile?.linkedin} rel="noreferrer">
                                 LinkedIn
                             </a>
                         )}
