@@ -7,8 +7,10 @@ import { saveUser, setImageUrl, setUserRole } from "../../api/auth";
 import { AuthContext } from "../../contexts/AuthProvider";
 import PrimaryButton from "../../Components/Button/PrimaryButton";
 import SmallSpinner from "../../Components/Spinner/SmallSpinner";
+import { setTitle } from "../../api/title";
 
 const Signup = () => {
+    setTitle("Sign Up");
     const {
         createUser,
         signInWithGoogle,

@@ -4,18 +4,30 @@ import { toast } from "react-hot-toast";
 import { FaFacebook, FaGithub, FaGoogle } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import PrimaryButton from "../../Components/Button/PrimaryButton";
+import SmallSpinner from "../../Components/Spinner/SmallSpinner";
 import { saveUser, setImageUrl, setUserRole } from "../../api/auth";
 import { AuthContext } from "../../contexts/AuthProvider";
-import SmallSpinner from "../../Components/Spinner/SmallSpinner";
+import { setTitle } from "../../api/title";
 
 const Login = () => {
+    setTitle("Login");
     const [email, setEmail] = useState("");
-    const { signInWithGoogle, signIn, loading, setLoading } =
+    const { signInWithGoogle, signIn, loading, setLoading,resetPassword } =
         useContext(AuthContext);
 
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from?.pathname || "/";
+
+    const handleReset = () => {
+        resetPassword(email).then(() => {
+            setLoading(false);
+            toast.success(`A password reset link send on ${email}`);
+        }).catch(err => {
+            toast.error(err.message);
+            setLoading(false);
+        })
+    }
 
     // implement email password signin
     const handleSubmit = (e) => {
@@ -87,7 +99,7 @@ const Login = () => {
                         required={true}
                     />
                     <div className="mb-2 block">
-                        <button className="text-sm mt-2 hover:text-blue-400">
+                        <button onClick={handleReset} className="text-sm mt-2 hover:text-blue-400">
                             Forget Password?
                         </button>
                     </div>

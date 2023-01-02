@@ -67,7 +67,6 @@ const router = createBrowserRouter([
                 path: "/updateProfile",
                 element: <UpdateProfile />,
             },
-            
         ],
     },
     {
@@ -158,11 +157,12 @@ const router = createBrowserRouter([
                 path: "/employerDashboard/applicantProfile/:email",
                 element: <ApplicantProfile />,
                 loader: ({ params }) =>
-                    fetch(`${process.env.REACT_APP_API_URL}/user/${params.email}`),
+                    fetch(
+                        `${process.env.REACT_APP_API_URL}/user/${params.email}`
+                    ),
             },
         ],
     },
-    
 ]);
 
 export default router;
