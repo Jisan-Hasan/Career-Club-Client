@@ -12,22 +12,30 @@ import { setTitle } from "../../api/title";
 const Login = () => {
     setTitle("Login");
     const [email, setEmail] = useState("");
-    const { signInWithGoogle, signIn, loading, setLoading,resetPassword } =
-        useContext(AuthContext);
+    const {
+        signInWithGoogle,
+        signIn,
+        loading,
+        setLoading,
+        resetPassword,
+        signInWithFacebook,
+    } = useContext(AuthContext);
 
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from?.pathname || "/";
 
     const handleReset = () => {
-        resetPassword(email).then(() => {
-            setLoading(false);
-            toast.success(`A password reset link send on ${email}`);
-        }).catch(err => {
-            toast.error(err.message);
-            setLoading(false);
-        })
-    }
+        resetPassword(email)
+            .then(() => {
+                setLoading(false);
+                toast.success(`A password reset link send on ${email}`);
+            })
+            .catch((err) => {
+                toast.error(err.message);
+                setLoading(false);
+            });
+    };
 
     // implement email password signin
     const handleSubmit = (e) => {
@@ -68,6 +76,30 @@ const Login = () => {
             })
             .catch((err) => {
                 toast.error(`${err.message}`);
+                setLoading(false);
+            });
+    };
+
+    // implement facebook signin
+    const handleFacebookSignIn = () => {
+        signInWithFacebook()
+            .then((result) => {
+                const user = result.user;
+
+                // save user in db
+                saveUser(user);
+                // setUserRole
+                setUserRole(user?.email, "job-seeker");
+                // show success
+                toast.success("Signin Successfully.");
+
+                // save user image
+                setImageUrl(user?.email, user?.photoURL);
+                navigate(from);
+            })
+            .catch((err) => {
+                toast.error(`${err.message}`);
+                setLoading(false);
             });
     };
     return (
@@ -99,7 +131,10 @@ const Login = () => {
                         required={true}
                     />
                     <div className="mb-2 block">
-                        <button onClick={handleReset} className="text-sm mt-2 hover:text-blue-400">
+                        <button
+                            onClick={handleReset}
+                            className="text-sm mt-2 hover:text-blue-400"
+                        >
                             Forget Password?
                         </button>
                     </div>
@@ -127,7 +162,7 @@ const Login = () => {
                 </h4>
                 <div className="flex justify-center gap-12 mt-4">
                     <FaGoogle onClick={handleGoogleSignIn} size={25} />
-                    <FaFacebook size={25} />
+                    <FaFacebook onClick={handleFacebookSignIn} size={25} />
                     <FaGithub size={25} />
                 </div>
             </div>

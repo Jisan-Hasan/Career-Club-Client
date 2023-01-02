@@ -1,7 +1,9 @@
 import {
+    FacebookAuthProvider,
+    GithubAuthProvider,
+    GoogleAuthProvider,
     createUserWithEmailAndPassword,
     getAuth,
-    GoogleAuthProvider,
     onAuthStateChanged,
     sendPasswordResetEmail,
     signInWithEmailAndPassword,
@@ -16,6 +18,8 @@ export const AuthContext = createContext();
 const auth = getAuth(app);
 
 const googleProvider = new GoogleAuthProvider();
+const facebookProvider = new FacebookAuthProvider();
+const githubProvider = new GithubAuthProvider();
 
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
@@ -31,6 +35,13 @@ const AuthProvider = ({ children }) => {
         setLoading(true);
         return signInWithPopup(auth, googleProvider);
     };
+
+    // create user with facebook
+    const signInWithFacebook = () => {
+        setLoading(true);
+        return signInWithPopup(auth, facebookProvider);
+    };
+
     // update user & photo url
     const updateUserProfile = (name, image) => {
         setLoading(true);
@@ -76,6 +87,7 @@ const AuthProvider = ({ children }) => {
         setLoading,
         createUser,
         signInWithGoogle,
+        signInWithFacebook,
         updateUserProfile,
         signIn,
         resetPassword,
