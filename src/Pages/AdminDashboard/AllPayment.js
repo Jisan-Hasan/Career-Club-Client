@@ -1,12 +1,18 @@
 import { Table } from "flowbite-react";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { setTitle } from "../../api/title";
+import { AuthContext } from "../../contexts/AuthProvider";
 
 const AllPayment = () => {
     setTitle("All Payments");
+    const { user } = useContext(AuthContext);
     const [payments, setPayments] = useState([]);
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/payments`)
+        fetch(`${process.env.REACT_APP_API_URL}/payments`, {
+            headers: {
+                email: user?.email,
+            },
+        })
             .then((res) => res.json())
             .then((data) => {
                 if (data.status) {

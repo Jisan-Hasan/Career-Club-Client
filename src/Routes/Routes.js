@@ -3,6 +3,8 @@ import AddCategories from "../Pages/AdminDashboard/AddCategories";
 import AddPackage from "../Pages/AdminDashboard/AddPackage";
 import AdminDashboard from "../Pages/AdminDashboard/AdminDashboard";
 import AllPayment from "../Pages/AdminDashboard/AllPayment";
+import AllUsers from "../Pages/AdminDashboard/AllUsers";
+import UserActivity from "../Pages/AdminDashboard/UserActivity";
 import ViewCategories from "../Pages/AdminDashboard/ViewCategories";
 import ViewJobs from "../Pages/AdminDashboard/ViewJobs";
 import ViewPackage from "../Pages/AdminDashboard/ViewPackage";
@@ -20,6 +22,7 @@ import JobDetails from "../Pages/JobDetails/JobDetails";
 import Jobs from "../Pages/Jobs/Jobs";
 import Login from "../Pages/Login/Login";
 import Signup from "../Pages/Login/Signup";
+import UserBlocked from "../Pages/Shared/UserBlocked";
 import UpdateProfile from "../Pages/UserProfile/UpdateProfile";
 import UserProfile from "../Pages/UserProfile/UserProfile";
 import AdminLayout from "../layout/AdminLayout";
@@ -105,6 +108,14 @@ const router = createBrowserRouter([
                 path: "/adminDashboard/payments",
                 element: <AllPayment />,
             },
+            {
+                path: "/adminDashboard/logs",
+                element: <UserActivity />,
+            },
+            {
+                path: "/adminDashboard/users",
+                element: <AllUsers />,
+            },
         ],
     },
     {
@@ -162,6 +173,10 @@ const router = createBrowserRouter([
                     ),
             },
         ],
+    },
+    {
+        path: "/blocked",
+        element: <UserBlocked />,
     },
 ]);
 

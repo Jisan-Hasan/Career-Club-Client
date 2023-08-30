@@ -1,10 +1,18 @@
 import { Button, Label, Modal, TextInput } from "flowbite-react";
-import React from "react";
+import React, { useContext } from "react";
 import { toast } from "react-hot-toast";
+import { AuthContext } from "../../contexts/AuthProvider";
 
-const PackageUpdateModal = ({ updateModal, setUpdateModal, selectedPack,refresh, setRefresh }) => {
+const PackageUpdateModal = ({
+    updateModal,
+    setUpdateModal,
+    selectedPack,
+    refresh,
+    setRefresh,
+}) => {
     // handle update package data
     // console.log(selectedPack);
+    const { user } = useContext(AuthContext);
     const handleUpdate = (e) => {
         e.preventDefault();
         setUpdateModal(false);
@@ -19,6 +27,7 @@ const PackageUpdateModal = ({ updateModal, setUpdateModal, selectedPack,refresh,
             method: "PATCH",
             headers: {
                 "content-type": "application/json",
+                email: user?.email,
             },
             body: JSON.stringify(updatedPack),
         })
@@ -31,7 +40,6 @@ const PackageUpdateModal = ({ updateModal, setUpdateModal, selectedPack,refresh,
                     toast.error("Can't Update Package!");
                 }
             });
-
     };
     return (
         <>

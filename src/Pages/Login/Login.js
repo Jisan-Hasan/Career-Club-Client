@@ -1,24 +1,28 @@
 import { Label, TextInput } from "flowbite-react";
 import React, { useContext, useState } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 import { toast } from "react-hot-toast";
 import { FaFacebook, FaGithub, FaGoogle } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import PrimaryButton from "../../Components/Button/PrimaryButton";
 import SmallSpinner from "../../Components/Spinner/SmallSpinner";
 import { saveUser, setImageUrl, setUserRole } from "../../api/auth";
-import { AuthContext } from "../../contexts/AuthProvider";
 import { setTitle } from "../../api/title";
+import { AuthContext } from "../../contexts/AuthProvider";
 
 const Login = () => {
     setTitle("Login");
     const [email, setEmail] = useState("");
+    const [isHuman, setIsHuman] = useState(false);
+    // const [isBlocked, setIsBlocked] = useState(false);
     const {
         signInWithGoogle,
         signIn,
         loading,
         setLoading,
         resetPassword,
-        signInWithFacebook,signInWithGithub
+        signInWithFacebook,
+        signInWithGithub,
     } = useContext(AuthContext);
 
     const navigate = useNavigate();
@@ -40,6 +44,10 @@ const Login = () => {
     // implement email password signin
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (!isHuman) {
+            toast.error("Verify yourself as human");
+            return;
+        }
         const form = e.target;
         // get form data
         const password = form.password.value;
@@ -47,7 +55,21 @@ const Login = () => {
         signIn(email, password)
             .then((result) => {
                 // const user = result.user;
-                // show success
+
+                // check for block or not
+                fetch(`${process.env.REACT_APP_API_URL}/user/${email}`)
+                    .then((res) => res.json())
+                    .then((data) => {
+                        if (data?.data?.isBlocked) {
+                            toast.error(
+                                "You are blocked. Contract to Authority!"
+                            );
+                            navigate("/blocked");
+                        } else {
+                            toast.success("Signin Successfully.");
+                            navigate(from);
+                        }
+                    });
                 toast.success("Signin Successfully.");
                 navigate(from);
             })
@@ -124,6 +146,10 @@ const Login = () => {
                 setLoading(false);
             });
     };
+
+    function onChange(value) {
+        setIsHuman(true);
+    }
     return (
         <div className="max-w-lg mx-auto mt-10  md:mt-14 lg:mt-20 bg-gray-100 px-12 py-14 rounded-xl divide-y-2">
             <h3 className="text-3xl font-bold mb-5 text-center">Login</h3>
@@ -160,6 +186,13 @@ const Login = () => {
                             Forget Password?
                         </button>
                     </div>
+                </div>
+
+                <div className="mb-2">
+                    <ReCAPTCHA
+                        sitekey="6LcoC8gnAAAAAJUwd5XXd645dST6JgD91IqCJeEn"
+                        onChange={onChange}
+                    />
                 </div>
 
                 <PrimaryButton

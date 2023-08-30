@@ -6,20 +6,26 @@ import {
     Textarea,
     TextInput,
 } from "flowbite-react";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useLoaderData, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../contexts/AuthProvider";
 
 const ModifyPost = () => {
+    const { user } = useContext(AuthContext);
     const data = useLoaderData();
     const [categories, setCategories] = useState([]);
     const job = data.data;
-    
+
     const navigate = useNavigate();
 
     // get all categories
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/category`)
+        fetch(`${process.env.REACT_APP_API_URL}/category`, {
+            headers: {
+                email: user?.email,
+            },
+        })
             .then((res) => res.json())
             .then((data) => {
                 if (data.status) {
@@ -60,14 +66,15 @@ const ModifyPost = () => {
             method: "PATCH",
             headers: {
                 "content-type": "application/json",
+                email: user?.email,
             },
             body: JSON.stringify(updatedJob),
         })
             .then((res) => res.json())
             .then((data) => {
-                if(data.status){
-                    navigate('/employerDashboard/myPost');
-                    toast.success('Job Updated Successfully.')
+                if (data.status) {
+                    navigate("/employerDashboard/myPost");
+                    toast.success("Job Updated Successfully.");
                 }
             });
 

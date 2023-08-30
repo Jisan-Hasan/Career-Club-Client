@@ -1,29 +1,39 @@
-import { Button, FileInput, Label, Radio, TextInput } from "flowbite-react";
-import React, { useContext } from "react";
+import { FileInput, Label, Radio, TextInput } from "flowbite-react";
+import React, { useContext, useState } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 import { toast } from "react-hot-toast";
 import { FaFacebook, FaGithub, FaGoogle } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import { saveUser, setImageUrl, setUserRole } from "../../api/auth";
-import { AuthContext } from "../../contexts/AuthProvider";
 import PrimaryButton from "../../Components/Button/PrimaryButton";
 import SmallSpinner from "../../Components/Spinner/SmallSpinner";
+import { saveUser, setImageUrl, setUserRole } from "../../api/auth";
 import { setTitle } from "../../api/title";
+import { AuthContext } from "../../contexts/AuthProvider";
 
 const Signup = () => {
     setTitle("Sign Up");
+    const [isHuman, setIsHuman] = useState(false);
     const {
         createUser,
         signInWithGoogle,
         updateUserProfile,
         loading,
         setLoading,
-        signInWithFacebook,signInWithGithub
+        signInWithFacebook,
+        signInWithGithub,
     } = useContext(AuthContext);
+    function onChange(value) {
+        setIsHuman(true);
+    }
 
     const navigate = useNavigate();
     // handle signup
     const handleSubmit = (event) => {
         event.preventDefault();
+        if (!isHuman) {
+            toast.error("Verify yourself as human");
+            return;
+        }
         const form = event.target;
 
         // get form data
@@ -224,6 +234,13 @@ const Signup = () => {
                         <Label htmlFor="employer">Employer</Label>
                     </div>
                 </fieldset>
+
+                <div className="mb-2">
+                    <ReCAPTCHA
+                        sitekey="6LcoC8gnAAAAAJUwd5XXd645dST6JgD91IqCJeEn"
+                        onChange={onChange}
+                    />
+                </div>
 
                 {/* Signup button */}
                 <PrimaryButton

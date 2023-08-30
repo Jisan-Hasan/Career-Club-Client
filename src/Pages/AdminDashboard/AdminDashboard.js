@@ -1,50 +1,68 @@
 import { Card, Tooltip } from "flowbite-react";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import { setTitle } from "../../api/title";
+import { AuthContext } from "../../contexts/AuthProvider";
 
 const AdminDashboard = () => {
     const [users, setUsers] = useState([]);
     const [jobs, setJobs] = useState([]);
     const [applicationCount, setApplicationCount] = useState(0);
-    const [payments,setPayments] = useState([]);
+    const [payments, setPayments] = useState([]);
     setTitle("Dashboard");
 
+    const { user } = useContext(AuthContext);
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/users`)
+        fetch(`${process.env.REACT_APP_API_URL}/users`, {
+            headers: {
+                email: user?.email,
+            },
+        })
             .then((res) => res.json())
             .then((data) => {
                 if (data.status) {
                     setUsers(data.data);
                 }
             });
-        fetch(`${process.env.REACT_APP_API_URL}/allJobs`)
+        fetch(`${process.env.REACT_APP_API_URL}/allJobs`, {
+            headers: {
+                email: user?.email,
+            },
+        })
             .then((res) => res.json())
             .then((data) => {
                 if (data.status) {
                     setJobs(data.data);
                 }
             });
-        fetch(`${process.env.REACT_APP_API_URL}/applicationsCount`)
+        fetch(`${process.env.REACT_APP_API_URL}/applicationsCount`, {
+            headers: {
+                email: user?.email,
+            },
+        })
             .then((res) => res.json())
             .then((data) => {
                 if (data.status) {
                     setApplicationCount(data.data);
                 }
             });
-        fetch(`${process.env.REACT_APP_API_URL}/allPayments`)
+        fetch(`${process.env.REACT_APP_API_URL}/allPayments`, {
+            headers: {
+                email: user?.email,
+            },
+        })
             .then((res) => res.json())
             .then((data) => {
                 if (data.status) {
                     setPayments(data.data);
                 }
             });
-    }, []);
+    }, [user]);
 
     let totalPayments = 0;
     payments.forEach((payment) => {
         totalPayments += Number(payment.price);
-    })
+    });
 
     // console.log(emp.length, jobSeeker.length)
     const usersData = [
@@ -104,12 +122,18 @@ const AdminDashboard = () => {
             </div>
             <div className="grid md:grid-cols-2 gap-5 mt-8 text-center">
                 <Card>
-                    <h3 className="text-xl font-semibold">Total Job Application</h3>
-                    <p className="text-3xl font-bold text-purple-600">{applicationCount}</p>
+                    <h3 className="text-xl font-semibold">
+                        Total Job Application
+                    </h3>
+                    <p className="text-3xl font-bold text-purple-600">
+                        {applicationCount}
+                    </p>
                 </Card>
                 <Card>
                     <h3 className="text-xl font-semibold">Total Revenue</h3>
-                    <p className="text-3xl font-bold text-[#2CA02C]">{totalPayments}</p>
+                    <p className="text-3xl font-bold text-[#2CA02C]">
+                        {totalPayments}
+                    </p>
                 </Card>
             </div>
         </div>

@@ -10,10 +10,10 @@ import { MdWork } from "react-icons/md";
 // import { GoLocation } from 'react-icons/go';
 // import { GrUserExpert } from 'react-icons/gr';
 // import { MdWork } from 'react-icons/md';
+import { toast } from "react-hot-toast";
 import { useLoaderData } from "react-router-dom";
 import { setTitle } from "../../api/title";
 import { AuthContext } from "../../contexts/AuthProvider";
-import { toast } from "react-hot-toast";
 
 const JobDetails = () => {
     const { user } = useContext(AuthContext);
@@ -27,7 +27,11 @@ const JobDetails = () => {
     const [userInfo, setUserInfo] = useState(null);
 
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/user/${user?.email}`)
+        fetch(`${process.env.REACT_APP_API_URL}/user/${user?.email}`, {
+            headers: {
+                email: user?.email,
+            },
+        })
             .then((res) => res.json())
             .then((data) => {
                 if (data.status) {
@@ -39,7 +43,11 @@ const JobDetails = () => {
 
     // get user role
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/userRole/${user?.email}`)
+        fetch(`${process.env.REACT_APP_API_URL}/userRole/${user?.email}`, {
+            headers: {
+                email: user?.email,
+            },
+        })
             .then((res) => res.json())
             .then((data) => {
                 if (data.status) {
@@ -51,7 +59,12 @@ const JobDetails = () => {
     // check is already applied or not
     useEffect(() => {
         fetch(
-            `${process.env.REACT_APP_API_URL}/application?email=${user?.email}&jobId=${job?._id}`
+            `${process.env.REACT_APP_API_URL}/application?email=${user?.email}&jobId=${job?._id}`,
+            {
+                headers: {
+                    email: user?.email,
+                },
+            }
         )
             .then((res) => res.json())
             .then((data) => {
@@ -76,7 +89,10 @@ const JobDetails = () => {
             };
             fetch(`${process.env.REACT_APP_API_URL}/application`, {
                 method: "POST",
-                headers: { "content-type": "application/json" },
+                headers: {
+                    "content-type": "application/json",
+                    email: user?.email,
+                },
                 body: JSON.stringify(application),
             })
                 .then((res) => res.json())

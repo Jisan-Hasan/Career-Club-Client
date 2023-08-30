@@ -1,8 +1,9 @@
 import { Button, Label, Modal, Table, TextInput } from "flowbite-react";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { FaExclamationTriangle } from "react-icons/fa";
 import { setTitle } from "../../api/title";
+import { AuthContext } from "../../contexts/AuthProvider";
 
 const ViewCategories = () => {
     const [categories, setCategories] = useState([]);
@@ -11,11 +12,17 @@ const ViewCategories = () => {
     const [selectedCategory, setSelectedCategory] = useState({});
     const [refresh, setRefresh] = useState(false);
 
+    const { user } = useContext(AuthContext);
+
     // set Title
     setTitle("Categories");
 
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/category`)
+        fetch(`${process.env.REACT_APP_API_URL}/category`, {
+            headers: {
+                email: user?.email,
+            },
+        })
             .then((res) => res.json())
             .then((data) => {
                 if (data.status) {
@@ -27,7 +34,11 @@ const ViewCategories = () => {
     // handle edit category
     const handleEdit = (id) => {
         // get category for edit
-        fetch(`${process.env.REACT_APP_API_URL}/category/${id}`)
+        fetch(`${process.env.REACT_APP_API_URL}/category/${id}`, {
+            headers: {
+                email: user?.email,
+            },
+        })
             .then((res) => res.json())
             .then((data) => {
                 if (data.status) {
@@ -49,6 +60,7 @@ const ViewCategories = () => {
                 method: "PATCH",
                 headers: {
                     "content-type": "application/json",
+                    email: user?.email,
                 },
                 body: JSON.stringify(updatedCategory),
             }
@@ -69,7 +81,11 @@ const ViewCategories = () => {
     // handle delete button click
     const handleDelete = (id) => {
         // get particular package data
-        fetch(`${process.env.REACT_APP_API_URL}/category/${id}`)
+        fetch(`${process.env.REACT_APP_API_URL}/category/${id}`, {
+            headers: {
+                email: user?.email,
+            },
+        })
             .then((res) => res.json())
             .then((data) => {
                 if (data.status) {
@@ -87,6 +103,9 @@ const ViewCategories = () => {
                 `${process.env.REACT_APP_API_URL}/category/${selectedCategory._id}`,
                 {
                     method: "DELETE",
+                    headers: {
+                        email: user?.email,
+                    },
                 }
             )
                 .then((res) => res.json())

@@ -10,7 +10,11 @@ const Mypaymentage = () => {
 
     // get all payment for the logged in user
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/payments/${user?.email}`)
+        fetch(`${process.env.REACT_APP_API_URL}/payments/${user?.email}`, {
+            headers: {
+                email: user?.email,
+            },
+        })
             .then((res) => res.json())
             .then((data) => {
                 if (data.status) {
@@ -18,7 +22,7 @@ const Mypaymentage = () => {
                 }
             });
     }, [user]);
-    
+
     // calculate total costs
     const totalCost = payments.reduce((accumulator, object) => {
         return accumulator + Number(object.price);
@@ -26,7 +30,11 @@ const Mypaymentage = () => {
 
     // get available post number
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/postNumber/${user?.email}`)
+        fetch(`${process.env.REACT_APP_API_URL}/postNumber/${user?.email}`, {
+            headers: {
+                email: user?.email,
+            },
+        })
             .then((res) => res.json())
             .then((data) => {
                 setAvailablePost(Number(data.postNumber));
@@ -67,7 +75,9 @@ const Mypaymentage = () => {
             </div>
 
             {/* show all transaction history */}
-            <h2 className="mt-10 text-2xl font-bold text-center">Payment History</h2>
+            <h2 className="mt-10 text-2xl font-bold text-center">
+                Payment History
+            </h2>
             <div className="mt-4">
                 <Table hoverable={true}>
                     <Table.Head className="text-base text-[#05A3B7]">
@@ -94,7 +104,6 @@ const Mypaymentage = () => {
                                 <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                                     {payment.email}
                                 </Table.Cell>
-                                
                             </Table.Row>
                         ))}
                     </Table.Body>

@@ -1,12 +1,14 @@
 import { Button, Label, TextInput } from "flowbite-react";
-import React from "react";
+import React, { useContext } from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { setTitle } from "../../api/title";
+import { AuthContext } from "../../contexts/AuthProvider";
 
 const AddPackage = () => {
     // set title
     setTitle("Add Package");
+    const { user } = useContext(AuthContext);
     const navigate = useNavigate();
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -23,6 +25,7 @@ const AddPackage = () => {
             method: "POST",
             headers: {
                 "content-type": "application/json",
+                email: user?.email,
             },
             body: JSON.stringify(pack),
         })

@@ -4,6 +4,7 @@ export const setPostNumber = (email, postNumber) => {
         method: "PATCH",
         headers: {
             "content-type": "application/json",
+            email: email,
         },
         body: JSON.stringify({ postNumber }),
     })
@@ -12,5 +13,3 @@ export const setPostNumber = (email, postNumber) => {
             return data;
         });
 };
-
-

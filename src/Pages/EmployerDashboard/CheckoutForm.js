@@ -17,7 +17,7 @@ const CheckoutForm = ({ pack }) => {
         // Create PaymentIntent as soon as the page loads
         fetch(`${process.env.REACT_APP_API_URL}/create-payment-intent`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", email: user?.email },
             body: JSON.stringify({ price }),
         })
             .then((res) => res.json())
@@ -25,11 +25,15 @@ const CheckoutForm = ({ pack }) => {
     }, [price]);
 
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/postNumber/${user?.email}`)
-        .then((res) => res.json())
-        .then((data) => {
-            setPost(Number(data.postNumber));
-        });
+        fetch(`${process.env.REACT_APP_API_URL}/postNumber/${user?.email}`, {
+            headers: {
+                email: user?.email,
+            },
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                setPost(Number(data.postNumber));
+            });
     }, [user, pack, price]);
     // console.log(post);
 
@@ -90,6 +94,7 @@ const CheckoutForm = ({ pack }) => {
                 method: "POST",
                 headers: {
                     "content-type": "application/json",
+                    email: user?.email,
                 },
                 body: JSON.stringify(payment),
             })
@@ -99,7 +104,10 @@ const CheckoutForm = ({ pack }) => {
                         setSuccess("Congrats! Your Payment Completed.");
                         setTransactionId(paymentIntent?.id);
                         // console.log(Number(post)+Number(postNumber));
-                        setPostNumber(user?.email,Number(post)+Number(postNumber));
+                        setPostNumber(
+                            user?.email,
+                            Number(post) + Number(postNumber)
+                        );
                         setProcessing(false);
                     }
                 });

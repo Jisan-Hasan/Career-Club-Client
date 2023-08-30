@@ -1,9 +1,9 @@
-import { Button, Label, TextInput, Textarea } from "flowbite-react";
+import { Button, TextInput, Textarea } from "flowbite-react";
 import React, { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../contexts/AuthProvider";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { setTitle } from "../../api/title";
+import { AuthContext } from "../../contexts/AuthProvider";
 
 const UpdateProfile = () => {
     setTitle("Update Profile");
@@ -12,7 +12,11 @@ const UpdateProfile = () => {
     const navigate = useNavigate();
     // get userinfo from db
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/user/${user?.email}`)
+        fetch(`${process.env.REACT_APP_API_URL}/user/${user?.email}`, {
+            headers: {
+                email: user?.email,
+            },
+        })
             .then((res) => res.json())
             .then((data) => {
                 if (data.status) {
@@ -54,6 +58,7 @@ const UpdateProfile = () => {
                 method: "PATCH",
                 headers: {
                     "content-type": "application/json",
+                    email: user?.email,
                 },
                 body: JSON.stringify(updateProfile),
             }

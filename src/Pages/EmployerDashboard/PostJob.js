@@ -23,7 +23,11 @@ const PostJob = () => {
 
     // get available post number
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/postNumber/${user?.email}`)
+        fetch(`${process.env.REACT_APP_API_URL}/postNumber/${user?.email}`, {
+            headers: {
+                email: user?.email,
+            },
+        })
             .then((res) => res.json())
             .then((data) => {
                 if (data.postNumber < 1) {
@@ -37,7 +41,11 @@ const PostJob = () => {
 
     // get all categories
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/category`)
+        fetch(`${process.env.REACT_APP_API_URL}/category`, {
+            headers: {
+                email: user?.email,
+            },
+        })
             .then((res) => res.json())
             .then((data) => {
                 if (data.status) {
@@ -78,19 +86,18 @@ const PostJob = () => {
         // save to db
         fetch(`${process.env.REACT_APP_API_URL}/jobs`, {
             method: "POST",
-            headers: { "content-type": "application/json" },
+            headers: { "content-type": "application/json", email: user?.email },
             body: JSON.stringify(job),
         })
             .then((res) => res.json())
             .then((data) => {
                 if (data.status) {
                     // reduce post limit
-                    setPostNumber(user?.email, Number(postLimit-1));
+                    setPostNumber(user?.email, Number(postLimit - 1));
                     // navigate to my job page
                     navigate("/employerDashboard/myPost");
                     // show toast
                     toast.success("Job Posted Successfully!");
-                    
                 }
             });
     };

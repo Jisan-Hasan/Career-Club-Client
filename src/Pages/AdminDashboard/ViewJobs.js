@@ -1,5 +1,5 @@
 import { Button, Card, Modal, Select } from "flowbite-react";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { BsAlarm, BsCurrencyDollar } from "react-icons/bs";
 import { FaExclamationTriangle, FaQuestion } from "react-icons/fa";
@@ -7,8 +7,8 @@ import { FcApproval, FcDisapprove } from "react-icons/fc";
 import { GoLocation } from "react-icons/go";
 import { GrUserExpert } from "react-icons/gr";
 import { MdWork } from "react-icons/md";
-import { Link } from "react-router-dom";
 import { setTitle } from "../../api/title";
+import { AuthContext } from "../../contexts/AuthProvider";
 
 const ViewJobs = () => {
     setTitle("All Jobs");
@@ -19,9 +19,15 @@ const ViewJobs = () => {
     const [deleteModal, setDeleteModal] = useState(false);
     const [approveModal, setApproveModal] = useState(false);
     const [detailsModal, setDetailsModal] = useState(false);
+    const { user } = useContext(AuthContext);
+    // console.log(user?.email);
 
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/jobs/${type}`)
+        fetch(`${process.env.REACT_APP_API_URL}/jobs/${type}`, {
+            headers: {
+                email: user?.email,
+            },
+        })
             .then((res) => res.json())
             .then((data) => {
                 if (data.status) {
@@ -46,6 +52,7 @@ const ViewJobs = () => {
                     method: "PATCH",
                     headers: {
                         "content-type": "application/json",
+                        email: user?.email,
                     },
                     body: JSON.stringify({ status: true }),
                 }
@@ -77,6 +84,9 @@ const ViewJobs = () => {
         if (isConfirm) {
             fetch(`${process.env.REACT_APP_API_URL}/job/${selectedJob._id}`, {
                 method: "DELETE",
+                headers: {
+                    email: user?.email
+                }
             })
                 .then((res) => res.json())
                 .then((data) => {

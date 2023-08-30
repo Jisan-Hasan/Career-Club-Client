@@ -9,7 +9,6 @@ import { MdWork } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { setTitle } from "../../api/title";
 import { AuthContext } from "../../contexts/AuthProvider";
-import { FaUser } from "react-icons/fa";
 
 const MyPosts = () => {
     setTitle("My Posts");
@@ -18,7 +17,11 @@ const MyPosts = () => {
     const [refresh, setRefresh] = useState(false);
     // get employer posted jobs
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/jobPost/${user?.email}`)
+        fetch(`${process.env.REACT_APP_API_URL}/jobPost/${user?.email}`, {
+            headers: {
+                email: user?.email,
+            },
+        })
             .then((res) => res.json())
             .then((data) => {
                 if (data.status) {
@@ -32,6 +35,9 @@ const MyPosts = () => {
     const handleDelete = (id) => {
         fetch(`${process.env.REACT_APP_API_URL}/job/${id}`, {
             method: "DELETE",
+            headers: {
+                email: user?.email,
+            },
         })
             .then((res) => res.json())
             .then((data) => {
@@ -89,7 +95,9 @@ const MyPosts = () => {
                         <div className="grid grid-cols-3 gap-2">
                             <Link
                                 to={`/employerDashboard/application/${job?._id}`}
-                                className={`btn w-full btn-primary ${job?.isApproved ? '' : 'btn-disabled'}`}
+                                className={`btn w-full btn-primary ${
+                                    job?.isApproved ? "" : "btn-disabled"
+                                }`}
                             >
                                 Application
                             </Link>

@@ -16,7 +16,8 @@ const Header = () => {
         fetch(`${process.env.REACT_APP_API_URL}/userRole/${user?.email}`)
             .then((res) => res.json())
             .then((data) => {
-                if (data.status) {
+                console.log(data);
+                if (data?.status && data?.data) {
                     setRole(data.data);
                 }
             });
@@ -33,7 +34,11 @@ const Header = () => {
     const [path, setPath] = useState("/userDashboard");
 
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/userRole/${user?.email}`)
+        fetch(`${process.env.REACT_APP_API_URL}/userRole/${user?.email}`, {
+            headers: {
+                email: user?.email,
+            },
+        })
             .then((res) => res.json())
             .then((data) => {
                 if (data.status) {

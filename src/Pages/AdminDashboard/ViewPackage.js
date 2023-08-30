@@ -1,11 +1,13 @@
 import { Button, Modal, Table } from "flowbite-react";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
-import { FaExclamation, FaExclamationTriangle } from "react-icons/fa";
+import { FaExclamationTriangle } from "react-icons/fa";
 import { setTitle } from "../../api/title";
+import { AuthContext } from "../../contexts/AuthProvider";
 import PackageUpdateModal from "./PackageUpdateModal";
 
 const ViewPackage = () => {
+    const { user } = useContext(AuthContext);
     const [packages, setPackages] = useState([]);
     const [updateModal, setUpdateModal] = useState(false);
     const [deleteModal, setDeleteModal] = useState(false);
@@ -13,10 +15,14 @@ const ViewPackage = () => {
     const [refresh, setRefresh] = useState(false);
 
     // set Title
-    setTitle('Packages')
+    setTitle("Packages");
 
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/package`)
+        fetch(`${process.env.REACT_APP_API_URL}/package`, {
+            headers: {
+                email: user?.email,
+            },
+        })
             .then((res) => res.json())
             .then((data) => {
                 if (data.status) {
@@ -41,7 +47,11 @@ const ViewPackage = () => {
     // handle delete button click
     const handleDelete = (id) => {
         // get particular package data
-        fetch(`${process.env.REACT_APP_API_URL}/package/${id}`)
+        fetch(`${process.env.REACT_APP_API_URL}/package/${id}`, {
+            headers: {
+                email: user?.email,
+            },
+        })
             .then((res) => res.json())
             .then((data) => {
                 if (data.status) {
@@ -59,6 +69,9 @@ const ViewPackage = () => {
                 `${process.env.REACT_APP_API_URL}/package/${selectedPack._id}`,
                 {
                     method: "DELETE",
+                    headers: {
+                        email: user?.email,
+                    },
                 }
             )
                 .then((res) => res.json())

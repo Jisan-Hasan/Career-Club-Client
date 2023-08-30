@@ -1,11 +1,13 @@
 import { Card, Label, Radio, Select } from "flowbite-react";
-import React, { useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
-import { setTitle } from "../../api/title";
-import JobCard from "./JobCard";
+import React, { useContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import Spinner from "../../Components/Spinner/Spinner";
+import { setTitle } from "../../api/title";
+import { AuthContext } from "../../contexts/AuthProvider";
+import JobCard from "./JobCard";
 
 const Jobs = () => {
+    const { user } = useContext(AuthContext);
     setTitle("Jobs");
     const [categories, setCategories] = useState([]);
     const [category, setCategory] = useState("all");
@@ -20,7 +22,11 @@ const Jobs = () => {
     // console.log(category, experience, type, duration, searchStr);
     // get all categories
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/category`)
+        fetch(`${process.env.REACT_APP_API_URL}/category`, {
+            headers: {
+                email: user?.email,
+            },
+        })
             .then((res) => res.json())
             .then((data) => {
                 if (data.status) {
@@ -33,9 +39,20 @@ const Jobs = () => {
     useEffect(() => {
         setLoading(true);
         fetch(
-            `${process.env.REACT_APP_API_URL}/jobs/?category=${category}&experience=${experience}&type=${type}&duration=${duration}&searchStr=${searchStr}`
+            `${process.env.REACT_APP_API_URL}/jobs/?category=${category}&experience=${experience}&type=${type}&duration=${duration}&searchStr=${searchStr}`,
+            {
+                headers: {
+                    email: user?.email,
+                },
+            }
         )
-            .then((res) => res.json())
+            .then((res) => {
+                if (res.status === 429) {
+                    toast.error("Too Many request! Please try again later!");
+                }
+
+                return res.json();
+            })
             .then((data) => {
                 if (data.status) {
                     setJobs(data.data);

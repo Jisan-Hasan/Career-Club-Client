@@ -1,9 +1,11 @@
 import { Card, Table, TextInput } from "flowbite-react";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { setTitle } from "../../api/title";
+import { AuthContext } from "../../contexts/AuthProvider";
 
 const JobApplication = () => {
+    const { user } = useContext(AuthContext);
     setTitle("Applications");
     const [applications, setApplications] = useState([]);
     const location = useLocation();
@@ -18,7 +20,12 @@ const JobApplication = () => {
     const applicationId = location.pathname.split("/")[3];
     useEffect(() => {
         fetch(
-            `${process.env.REACT_APP_API_URL}/application/${applicationId}?uni=${university}`
+            `${process.env.REACT_APP_API_URL}/application/${applicationId}?uni=${university}`,
+            {
+                headers: {
+                    email: user?.email,
+                },
+            }
         )
             .then((res) => res.json())
             .then((data) => {

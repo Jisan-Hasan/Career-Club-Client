@@ -16,7 +16,11 @@ const UserProfile = () => {
     const [refresh, setRefresh] = useState(false);
     // get userinfo from db
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/user/${user?.email}`)
+        fetch(`${process.env.REACT_APP_API_URL}/user/${user?.email}`, {
+            headers: {
+                email: user?.email,
+            },
+        })
             .then((res) => res.json())
             .then((data) => {
                 if (data.status) {
@@ -39,7 +43,7 @@ const UserProfile = () => {
 
         fetch(`${process.env.REACT_APP_API_URL}/addSkill/${userProfile?._id}`, {
             method: "PATCH",
-            headers: { "content-type": "application/json" },
+            headers: { "content-type": "application/json", email: user?.email },
             body: JSON.stringify({ skills: skills }),
         })
             .then((res) => res.json())
@@ -84,25 +88,39 @@ const UserProfile = () => {
                         <AiOutlineLink />{" "}
                         {userProfile?.github && userProfile?.github !== "" && (
                             <>
-                                <a target="_blank" href={userProfile?.github} rel="noreferrer">
+                                <a
+                                    target="_blank"
+                                    href={userProfile?.github}
+                                    rel="noreferrer"
+                                >
                                     GitHub
                                 </a>{" "}
                                 ||{" "}
                             </>
                         )}
-                        {userProfile?.portfolio && userProfile?.portfolio !== "" && (
-                            <>
-                                <a target="_blank" href={userProfile?.portfolio} rel="noreferrer">
-                                    Portfolio
-                                </a>{" "}
-                                ||{" "}
-                            </>
-                        )}
-                        {userProfile?.linkedin && userProfile?.linkedin !== "" && (
-                            <a target="_blank" href={userProfile?.linkedin} rel="noreferrer">
-                                LinkedIn
-                            </a>
-                        )}
+                        {userProfile?.portfolio &&
+                            userProfile?.portfolio !== "" && (
+                                <>
+                                    <a
+                                        target="_blank"
+                                        href={userProfile?.portfolio}
+                                        rel="noreferrer"
+                                    >
+                                        Portfolio
+                                    </a>{" "}
+                                    ||{" "}
+                                </>
+                            )}
+                        {userProfile?.linkedin &&
+                            userProfile?.linkedin !== "" && (
+                                <a
+                                    target="_blank"
+                                    href={userProfile?.linkedin}
+                                    rel="noreferrer"
+                                >
+                                    LinkedIn
+                                </a>
+                            )}
                     </p>
                 </div>
             </div>
@@ -124,8 +142,11 @@ const UserProfile = () => {
                 <div className="mt-2 space-x-2">
                     {!userProfile?.skills
                         ? "No Skills Found"
-                        : userProfile?.skills.map((skill,i) => (
-                              <span key={i} className="font-normal text-gray-700 dark:text-gray-400 bg-red-400 px-4 py-2 rounded-2xl">
+                        : userProfile?.skills.map((skill, i) => (
+                              <span
+                                  key={i}
+                                  className="font-normal text-gray-700 dark:text-gray-400 bg-red-400 px-4 py-2 rounded-2xl"
+                              >
                                   {skill}
                               </span>
                           ))}

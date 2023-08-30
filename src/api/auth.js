@@ -10,12 +10,14 @@ export const saveUser = (user) => {
         method: "PUT",
         headers: {
             "content-type": "application/json",
+            email: user?.email,
         },
         body: JSON.stringify(currentUser),
-    }).then(res => res.json())
-    .then(data => {
-        return data.status;
     })
+        .then((res) => res.json())
+        .then((data) => {
+            return data.status;
+        });
 };
 
 // set employer package
@@ -30,13 +32,14 @@ export const setUserRole = async (email, role) => {
         method: "PATCH",
         headers: {
             "content-type": "application/json",
+            email: email,
         },
         body: JSON.stringify(roleObj),
     })
         .then((res) => res.json())
         .then((data) => {
             // set initial package number 0
-            if(role === 'employer'){
+            if (role === "employer") {
                 setPostNumber(email, 0);
             }
             return data.status;
@@ -54,6 +57,7 @@ export const setImageUrl = async (email, img) => {
         method: "PATCH",
         headers: {
             "content-type": "application/json",
+            email: email,
         },
         body: JSON.stringify(imgObj),
     })
@@ -73,6 +77,7 @@ export const setUserVerifyStatus = async (email, isVerified) => {
         method: "PATCH",
         headers: {
             "content-type": "application/json",
+            email: email,
         },
         body: JSON.stringify(verifyObj),
     })

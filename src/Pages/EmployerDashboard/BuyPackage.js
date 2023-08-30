@@ -1,14 +1,20 @@
 import { Card } from "flowbite-react";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { setTitle } from "../../api/title";
+import { AuthContext } from "../../contexts/AuthProvider";
 
 const BuyPackage = () => {
+    const { user } = useContext(AuthContext);
     setTitle("Buy Package");
     const [packages, setPackages] = useState([]);
     // get all packages
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/package`)
+        fetch(`${process.env.REACT_APP_API_URL}/package`, {
+            headers: {
+                email: user?.email,
+            },
+        })
             .then((res) => res.json())
             .then((data) => {
                 if (data.status) {
@@ -36,10 +42,7 @@ const BuyPackage = () => {
                                     {pack.price}
                                 </span>
                             </div>
-                            <ul
-                                
-                                className="my-7 space-y-5 flex flex-col items-center"
-                            >
+                            <ul className="my-7 space-y-5 flex flex-col items-center">
                                 <li className="flex space-x-3">
                                     <svg
                                         className="h-5 w-5 shrink-0 text-blue-600 dark:text-blue-500"
@@ -58,13 +61,17 @@ const BuyPackage = () => {
                                     </span>
                                 </li>
                             </ul>
-                            <Link className="inline-flex w-2/3 mx-auto justify-center" to={`/employerDashboard/payment/${pack._id}`}>
-                            <button
-                                type="button"
-                                className="rounded-lg bg-blue-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900"
+                            <Link
+                                className="inline-flex w-2/3 mx-auto justify-center"
+                                to={`/employerDashboard/payment/${pack._id}`}
                             >
-                                Buy Package
-                            </button></Link>
+                                <button
+                                    type="button"
+                                    className="rounded-lg bg-blue-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900"
+                                >
+                                    Buy Package
+                                </button>
+                            </Link>
                         </Card>
                     </div>
                 ))}
